@@ -1,11 +1,11 @@
-import Landing from "@/components/Landing";
+import Hero from "@/components/Hero";
 import Nav from "@/components/Nav";
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Nav />
-      <Landing />
-    </div>
+      <Hero />
+    </>
   );
 }
