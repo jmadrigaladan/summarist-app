@@ -9,15 +9,13 @@ export default function Nav() {
           <li className="text-[#032b41] hover:text-[#2bd97c] cursor-pointer transition duration-100">
             Login
           </li>
-          <li className="text-[#032b41] max-[576px]:hidden cursor-not-allowed">
+          <li className="text-[#032b41]  sm:hidden cursor-not-allowed">
             About
           </li>
-          <li className="text-[#032b41] max-[576px]:hidden cursor-not-allowed">
+          <li className="text-[#032b41] sm:hidden cursor-not-allowed">
             Contact
           </li>
-          <li className="text-[#032b41] max-[576px]:hidden cursor-not-allowed">
-            Help
-          </li>
+          <li className="text-[#032b41]  sm:hidden cursor-not-allowed">Help</li>
         </ul>
       </div>
     </nav>

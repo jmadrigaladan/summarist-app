@@ -386,22 +386,22 @@ button:disabled {
 }
 
 @media (max-width: 768px) {
-  .landing__content {
+  /* .landing__content {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     max-width: 540px;
     margin: 0 auto;
-  }
+  } */
 
-  .landing__image--mask {
+  /* .landing__image--mask {
     display: none;
-  }
+  } */
 
-  .landing__content__title {
+  /* .landing__content__title {
     font-size: 24px;
-  }
+  } */
 
   .features__wrapper {
     grid-template-columns: 1fr;
