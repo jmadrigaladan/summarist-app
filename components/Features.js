@@ -33,7 +33,6 @@ export default function Features() {
             <div className="flex flex-col items-center text-center">
               {/* features__icon */}
               <div className="flex justify-center mb-[8px] text-[#032b41]">
-                {/*features__icon svg */}
                 <AiFillBulb className="w-[48px] h-[48px] md:w-[60px] md:h-[60px]" />
               </div>
               {/* features__title */}
@@ -61,74 +60,144 @@ export default function Features() {
               </div>
             </div>
           </div>
-          {/* statisitics__wrapper */}
-          <div className="flex gap-[80px] mb-96px">
-            <div className="statistics__content--header">
-              <div className="statistics__heading">Enhance your knowledge</div>
-              <div className="statistics__heading">Achieve greater success</div>
-              <div className="statistics__heading">Improve your health</div>
-              <div className="statistics__heading">
+          {/* statistics sub section */}
+          {/* statistics__wrapper */}
+          <div class="flex gap-[32px] md:gap-[80px] mb-[32px] md:mb-[96px] flex-col md:flex-row ">
+            {/* statistics__content--header */}
+            <div class="w-full flex flex-col justify-center">
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Enhance your knowledge
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Achieve greater success
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Improve your health
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
                 Develop better parenting skills
               </div>
-              <div className="statistics__heading">Increase happiness</div>
-              <div className="statistics__heading">
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Increase happiness
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
                 Be the best version of yourself!
               </div>
             </div>
-            <div className="statistics__content--details">
-              <div className="statistics__data">
-                <div className="statistics__data--number">93%</div>
-                <div className="statistics__data--title">
+
+            {/* statistics__content--details */}
+            <div class="w-full flex flex-col justify-center gap-[24px] bg-[#f1f6f4] py-[40px] px-[24px]">
+              {/* statistics__data */}
+              <div class="flex gap-[16px]">
+                {/* statistics__data--number */}
+                <div class="text-[#0365f2] text-[20px] font-semibold mt-[4px]">
+                  93%
+                </div>
+                {/* statistics__data--title  */}
+                <div class="text-[16px] md:text-[20px] font-light text-[#394547] ">
                   of Summarist members <b>significantly increase</b> reading
                   frequency.
                 </div>
               </div>
-              <div className="statistics__data">
-                <div className="statistics__data--number">96%</div>
-                <div className="statistics__data--title">
+              {/* statistics__data */}
+              <div class="flex gap-[16px]">
+                {/* statistics__data--number */}
+                <div class="text-[#0365f2] text-[20px] font-semibold mt-[4px]">
+                  96%
+                </div>
+                {/* statistics__data--title  */}
+                <div class="text-[16px] md:text-[20px] font-light text-[#394547] ">
                   of Summarist members <b>establish better</b> habits.
                 </div>
               </div>
-              <div className="statistics__data">
-                <div className="statistics__data--number">90%</div>
-                <div className="statistics__data--title">
+              {/* statistics__data */}
+              <div class="flex gap-[16px]">
+                {/* statistics__data--number */}
+                <div class="text-[#0365f2] text-[20px] font-semibold mt-[4px]">
+                  90%
+                </div>
+                {/* statistics__data--title  */}
+                <div class="text-[16px] md:text-[20px] font-light text-[#394547] ">
                   have made <b>significant positive</b> change to their lives.
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="statistics__wrapper">
-          <div className="statistics__content--details statistics__content--details-second">
-            <div className="statistics__data">
-              <div className="statistics__data--number">91%</div>
-              <div className="statistics__data--title">
-                of Summarist members <b>report feeling more productive</b>
-                {""} after incorporating the service into their daily routine.
+
+          {/* statistics__wrapper */}
+          <div class="flex gap-[32px] md:gap-[80px] mb-[0px] md:mb-[96px] flex-col md:flex-row ">
+            {/* .statistics__content--details statistics__content--details-second */}
+            <div class="w-full flex flex-col justify-center gap-[24px] bg-[#f1f6f4] py-[40px] px-[24px] statistics__content--details-second">
+              {/* statistics__data */}
+              <div class="flex gap-[16px]">
+                {/* statistics__data--number */}
+                <div class="text-[#0365f2] text-[20px] font-semibold mt-[4px]">
+                  91%
+                </div>
+                {/* statistics__data--title  */}
+                <div class="text-[16px] md:text-[20px] font-light text-[#394547] ">
+                  of Summarist members <b>report feeling more productive</b>
+                  {""} after incorporating the service into their daily routine.
+                </div>
+              </div>
+              {/* statistics__data */}
+              <div class="flex gap-[16px]">
+                {/* statistics__data--number */}
+                <div class="text-[#0365f2] text-[20px] font-semibold mt-[4px]">
+                  94%
+                </div>
+                {/* statistics__data--title  */}
+                <div class="text-[16px] md:text-[20px] font-light text-[#394547] ">
+                  of Summarist members have <b>noticed an improvement</b> in
+                  their overall comprehension and retention of information.
+                </div>
+              </div>
+              {/* statistics__data */}
+              <div class="flex gap-[16px]">
+                {/* statistics__data--number */}
+                <div class="text-[#0365f2] text-[20px] font-semibold mt-[4px]">
+                  88%
+                </div>
+                {/* statistics__data--title  */}
+                <div class="text-[16px] md:text-[20px] font-light text-[#394547] ">
+                  of Summarist members <b>feel more informed</b> about current
+                  events and industry trends since using the platform.
+                </div>
               </div>
             </div>
-            <div className="statistics__data">
-              <div className="statistics__data--number">94%</div>
-              <div className="statistics__data--title">
-                of Summarist members have <b>noticed an improvement</b> in their
-                overall comprehension and retention of information.
+            {/* statistics__content--header statistics__content--header-second  */}
+            <div class="w-full flex flex-col justify-center items-start md:items-end">
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Expand your learning
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Accomplish your goals
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Strengthen your vitality
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Become a better caregiver
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Improve your mood
+              </div>
+              {/*  statistics__heading */}
+              <div class="text-[24px] md:text-[32px] font-medium text-[#6b757b] mb-[16px]">
+                Maximize your abilities
               </div>
             </div>
-            <div className="statistics__data">
-              <div className="statistics__data--number">88%</div>
-              <div className="statistics__data--title">
-                of Summarist members <b>feel more informed</b> about current
-                events and industry trends since using the platform.
-              </div>
-            </div>
-          </div>
-          <div className="statistics__content--header statistics__content--header-second">
-            <div className="statistics__heading">Expand your learning</div>
-            <div className="statistics__heading">Accomplish your goals</div>
-            <div className="statistics__heading">Strengthen your vitality</div>
-            <div className="statistics__heading">Become a better caregiver</div>
-            <div className="statistics__heading">Improve your mood</div>
-            <div className="statistics__heading">Maximize your abilities</div>
           </div>
         </div>
       </div>
