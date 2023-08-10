@@ -1,3 +1,5 @@
+import LogInModal from "./modals/LogInModal";
+
 export default function Nav() {
   return (
     <nav className="h-[80px]">
@@ -6,9 +8,7 @@ export default function Nav() {
           <img className="w-full h-full" src={"/assets/logo.png"} alt="logo" />
         </figure>
         <ul className="flex gap-[24px]">
-          <li className="text-[#032b41] hover:text-[#2bd97c] cursor-pointer transition duration-100">
-            Login
-          </li>
+          <LogInModal />
           <li className="text-[#032b41]  hidden xs:inline cursor-not-allowed">
             About
           </li>
