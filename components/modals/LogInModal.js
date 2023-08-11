@@ -2,6 +2,8 @@ import { closeLogInModal, openLogInModal } from "@/redux/modalSlice";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { BiSolidUser } from "react-icons/bi";
+import { CgClose } from "react-icons/cg";
+import SignUpModal from "./SignUpModal";
 
 export default function LogInModal() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen);
@@ -21,13 +23,17 @@ export default function LogInModal() {
         disableAutoFocus={true}
         className="flex justify-center items-center outline-none "
       >
-        <div className="bg-white w-[400px]  rounded-lg flex flex-col justify-center">
+        <div className="bg-white w-[400px]  rounded-lg flex flex-col justify-center relative">
+          <CgClose
+            className="w-[30px] h-[30px] absolute top-[16px] right-[16px] cursor-pointer hover:opacity-50"
+            onClick={() => dispatch(closeLogInModal())}
+          />
           <div className="w-full flex flex-col items-center pt-[48px] px-[32px] pb-[24px]">
             <h1 className="text-center text-[20px] font-bold mb-[24px] text-[#032b41] ">
               Log in to Summarist
             </h1>
             <div className="flex justify-center w-full">
-              <button className="flex items-center  bg-[#3a579d] w-full h-[40px] min-w-[180px] rounded-[4px]">
+              <button className="flex items-center  bg-[#3a579d] w-full h-[40px] min-w-[180px] rounded-[4px] hover:opacity-70">
                 <BiSolidUser className="w-[40px] h-[40px] py-[4px] mr-[64px] fill-white" />
                 <div className="text-white text-center">Login as a Guest</div>
               </button>
@@ -38,7 +44,7 @@ export default function LogInModal() {
               <hr className="w-[40%] h-[8px] text-[#bac8ce]" />
             </div>
             <div className="flex justify-center w-full">
-              <button className="flex items-center bg-[#4285f4] w-full h-[40px] min-w-[180px] rounded-[4px]">
+              <button className="flex items-center bg-[#4285f4] w-full h-[40px] min-w-[180px] rounded-[4px] hover:opacity-70">
                 <figure className="pl-[4px]">
                   <img
                     src="/assets/google.png"
@@ -70,7 +76,7 @@ export default function LogInModal() {
               />
             </div>
 
-            <button className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px]">
+            <button className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70">
               LogIn
             </button>
 
@@ -78,9 +84,7 @@ export default function LogInModal() {
               Forgot your password?
             </div>
           </div>
-          <div className="flex items-center justify-center w-full bg-[#f1f6f4] h-[40px] text-[#116be9] text-[14px] font-light cursor-pointer ">
-            Don't have an account?
-          </div>
+          <SignUpModal onClick={() => dispatch(closeLogInModal())} />
         </div>
       </Modal>
     </>
