@@ -21,6 +21,9 @@ const modalSlice = createSlice({
     closeLogInModal: (state) => {
       state.loginModalOpen = false;
     },
+    openSignUpCloseLogIn(state = initialState, action) => {
+      
+    }
   },
 });
 
@@ -29,6 +32,7 @@ export const {
   closeSignUpModal,
   openLogInModal,
   closeLogInModal,
+  closeLogInOpenSignUpModal,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

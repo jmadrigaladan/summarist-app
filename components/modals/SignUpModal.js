@@ -2,6 +2,7 @@ import {
   closeLogInModal,
   closeSignUpModal,
   openSignUpModal,
+  closeLogInOpenSignUpModal,
 } from "@/redux/modalSlice";
 import Modal from "@mui/material/Modal";
 import { CgClose } from "react-icons/cg";
@@ -9,22 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function SignUpModal() {
   const isSignUpOpen = useSelector((state) => state.modals.signupModalOpen);
+  const isLogInOpen = useSelector((state) => state.modals.loginModalOpen);
   const dispatch = useDispatch();
-
-  function modalController(modalToOpen) {
-    if (modalToOpen === "signUp") {
-      dispatch(closeLogInModal());
-      //   dispatch(openSignUpModal());
-    }
-  }
 
   return (
     <>
       <div
         className="flex items-center justify-center w-full bg-[#f1f6f4] h-[40px] text-[#116be9] text-[14px] font-light cursor-pointer"
         onClick={() => {
-          modalController("signUp");
-          dispatch(openSignUpModal());
+          dispatch(closeLogInOpenSignUpModal());
         }}
       >
         Don't have an account?

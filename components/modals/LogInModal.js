@@ -84,7 +84,7 @@ export default function LogInModal() {
               Forgot your password?
             </div>
           </div>
-          <SignUpModal onClick={() => dispatch(closeLogInModal())} />
+          <SignUpModal />
         </div>
       </Modal>
     </>
