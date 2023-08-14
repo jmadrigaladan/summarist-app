@@ -1,4 +1,4 @@
-import LogInModal from "./modals/LogInModal";
+import LogInModal from "./modals/AuthModal";
 
 export default function Nav() {
   return (
