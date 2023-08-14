@@ -7,18 +7,52 @@ import {
 import Modal from "@mui/material/Modal";
 import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "@/firebase";
+import { useEffect, useState } from "react";
+import { setUser } from "@/redux/userSlice";
 
 export default function SignUpModal() {
   const isSignUpOpen = useSelector((state) => state.modals.signupModalOpen);
   const isLogInOpen = useSelector((state) => state.modals.loginModalOpen);
   const dispatch = useDispatch();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState();
+
+  async function handleSignUp() {
+    const userCredentials = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+  }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) return;
+      console.log(currentUser);
+      dispatch(
+        setUser({
+          email: currentUser.email,
+          uid: currentUser.uid,
+        })
+      );
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <>
       <div
         className="flex items-center justify-center w-full bg-[#f1f6f4] h-[40px] text-[#116be9] text-[14px] font-light cursor-pointer"
         onClick={() => {
-          dispatch(closeLogInOpenSignUpModal());
+          dispatch(openSignUpModal());
+          dispatch(closeLogInModal());
         }}
       >
         Don't have an account?
@@ -62,17 +96,20 @@ export default function SignUpModal() {
                 className="w-full h-[40px] rounded-md bg-transparent border-[2px] border-[#bac8ce] p-4 focus:outline-none focus:border-[#2bd97c]"
                 placeholder="Email Address"
                 type="email"
-                onChange={() => {}}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 className="w-full h-[40px] mt-[16px] rounded-md bg-transparent border-[2px] border-[#bac8ce] p-4 focus:outline-none focus:border-[#2bd97c]"
                 placeholder="Password"
                 type="password"
-                onChange={() => {}}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            <button className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70">
+            <button
+              className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70"
+              onClick={handleSignUp}
+            >
               SignUp
             </button>
 

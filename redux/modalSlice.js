@@ -21,9 +21,7 @@ const modalSlice = createSlice({
     closeLogInModal: (state) => {
       state.loginModalOpen = false;
     },
-    openSignUpCloseLogIn(state = initialState, action) => {
-      
-    }
+    
   },
 });
 
