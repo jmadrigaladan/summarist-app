@@ -1,8 +1,10 @@
 import { openAuthModal, closeAuthModal } from "@/redux/modalSlice";
+
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { BiSolidUser } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -75,6 +77,7 @@ export default function AuthModal() {
                 dispatch(closeAuthModal());
               }}
             />
+
             <div className="w-full flex flex-col items-center pt-[48px] px-[32px] pb-[24px]">
               <h1 className="text-center text-[20px] font-bold mb-[24px] text-[#032b41] ">
                 Sign up to Summarist
@@ -132,6 +135,7 @@ export default function AuthModal() {
                 className="w-[30px] h-[30px] absolute top-[16px] right-[16px] cursor-pointer hover:opacity-50"
                 onClick={() => dispatch(closeAuthModal())}
               />
+
               <div className="w-full flex flex-col items-center pt-[48px] px-[32px] pb-[24px]">
                 <h1 className="text-center text-[20px] font-bold mb-[24px] text-[#032b41] ">
                   Log in to Summarist
@@ -145,6 +149,10 @@ export default function AuthModal() {
                     <div className="text-white text-center">
                       Login as a Guest
                     </div>
+                    <CircularProgress
+                      // color="white"
+                      className="w-[16px] h-[16px]"
+                    />
                   </button>
                 </div>
                 <div className="my-[16px] flex items-center justify-between w-full">

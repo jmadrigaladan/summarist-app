@@ -1,4 +1,8 @@
+import { openAuthModal } from "@/redux/modalSlice";
+import { useDispatch } from "react-redux";
+
 export default function Hero() {
+  const dispatch = useDispatch();
   return (
     <>
       {/* container */}
@@ -26,7 +30,12 @@ export default function Hero() {
                 <br className="hidden md:inline" />
                 and even people who don’t like to read.
               </div>
-              <button className="btn home__cta--btn">Login</button>
+              <button
+                className="btn home__cta--btn"
+                onClick={() => dispatch(openAuthModal())}
+              >
+                Login
+              </button>
             </div>
             {/* landing__image--mask */}
             <figure className="w-full md:flex justify-end hidden ">
