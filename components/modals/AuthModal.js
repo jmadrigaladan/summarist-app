@@ -1,5 +1,5 @@
 import { openAuthModal, closeAuthModal } from "@/redux/modalSlice";
-
+import { useRouter } from "next/router";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { BiSolidUser } from "react-icons/bi";
@@ -21,6 +21,7 @@ export default function AuthModal() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState();
+  const [pageLoading, setPageLoading] = useState(false);
 
   async function handleSignUp() {
     const userCredentials = await createUserWithEmailAndPassword(
@@ -52,6 +53,31 @@ export default function AuthModal() {
 
     return unsubscribe;
   }, []);
+
+  function Loading() {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+      const handleStart = (url) => url !== router.asPath && setLoading(true);
+      const handleComplete = (url) =>
+        url === router.asPath &&
+        setTimeout(() => {
+          setLoading(false), 5000;
+        });
+
+      router.events.on("routerChangeStart", handleStart);
+      router.events.on("routerChangeError", handleComplete);
+      router.events.on("routerChangeComplete", handleComplete);
+      return () => {
+        router.events.off("routerChangeStart", handleStart);
+        router.events.off("routerChangeError", handleComplete);
+        router.events.off("routerChangeComplete", handleComplete);
+      };
+    })
+    return loading && (
+      
+    )
+  }
 
   return (
     <>
@@ -145,14 +171,24 @@ export default function AuthModal() {
                     className="flex items-center  bg-[#3a579d] w-full h-[40px] min-w-[180px] rounded-[4px] hover:opacity-70"
                     onClick={handleGuestSignIn}
                   >
-                    <BiSolidUser className="w-[40px] h-[40px] py-[4px] mr-[64px] fill-white" />
-                    <div className="text-white text-center">
-                      Login as a Guest
-                    </div>
-                    <CircularProgress
-                      // color="white"
-                      className="w-[16px] h-[16px]"
-                    />
+                    {pageLoading ? (
+                      <>
+                        <div className="w-full flex justify-center">
+                          <CircularProgress
+                            size="2rem"
+                            style={{ color: "white" }}
+                            className="flex justify-center"
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <BiSolidUser className="w-[40px] h-[40px] py-[4px] mr-[64px] fill-white" />
+                        <div className="text-white text-center">
+                          Login as a Guest
+                        </div>
+                      </>
+                    )}
                   </button>
                 </div>
                 <div className="my-[16px] flex items-center justify-between w-full">
@@ -194,10 +230,20 @@ export default function AuthModal() {
                 </div>
 
                 <button
-                  className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70"
+                  className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70 flex items-center justify-center"
                   onClick={handleSignIn}
                 >
-                  LogIn
+                  {pageLoading ? (
+                    <>
+                      <CircularProgress
+                        size="2rem"
+                        style={{ color: "white" }}
+                        className
+                      />
+                    </>
+                  ) : (
+                    "LogIn"
+                  )}
                 </button>
 
                 <div className="w-full text-center text-[#116be9] text-[14px] font-light mt-[24px] cursor-pointer">
