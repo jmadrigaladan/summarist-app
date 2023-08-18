@@ -1,4 +1,4 @@
-export default function forYou() {
+export default function foryou() {
   return (
     <div>
       <h1>For you page</h1>

@@ -18,6 +18,7 @@ export default function AuthModal() {
   const isOpen = useSelector((state) => state.modals.authModalOpen);
   const dispatch = useDispatch();
   const [registeredAccount, setRegisteredAccount] = useState(false);
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState();
@@ -29,14 +30,26 @@ export default function AuthModal() {
       email,
       password
     );
+    setTimeout(() => {
+      setPageLoading(true);
+      router.push("/foryou");
+    }, 2000);
   }
 
   async function handleSignIn() {
     await signInWithEmailAndPassword(auth, email, password);
+    setTimeout(() => {
+      setPageLoading(true);
+      router.push("/foryou");
+    }, 2000);
   }
 
   async function handleGuestSignIn() {
     await signInWithEmailAndPassword(auth, "guest@gmail.com", "User12345");
+    setTimeout(() => {
+      setPageLoading(true);
+      router.push("/foryou");
+    }, 2000);
   }
 
   useEffect(() => {
@@ -54,30 +67,34 @@ export default function AuthModal() {
     return unsubscribe;
   }, []);
 
-  function Loading() {
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    useEffect(() => {
-      const handleStart = (url) => url !== router.asPath && setLoading(true);
-      const handleComplete = (url) =>
-        url === router.asPath &&
-        setTimeout(() => {
-          setLoading(false), 5000;
-        });
-
-      router.events.on("routerChangeStart", handleStart);
-      router.events.on("routerChangeError", handleComplete);
-      router.events.on("routerChangeComplete", handleComplete);
-      return () => {
-        router.events.off("routerChangeStart", handleStart);
-        router.events.off("routerChangeError", handleComplete);
-        router.events.off("routerChangeComplete", handleComplete);
-      };
-    })
-    return loading && (
-      
-    )
+  function forYouPage() {
+    router.push("/foryou");
+    setPageLoading(true);
   }
+  // function Loading() {
+  //   const router = useRouter();
+  //   const [loading, setLoading] = useState(false);
+  //   useEffect(() => {
+  //     const handleStart = (url) => url !== router.asPath && setLoading(true);
+  //     const handleComplete = (url) =>
+  //       url === router.asPath &&
+  //       setTimeout(() => {
+  //         setLoading(false), 5000;
+  //       });
+
+  //     router.events.on("routerChangeStart", handleStart);
+  //     router.events.on("routerChangeError", handleComplete);
+  //     router.events.on("routerChangeComplete", handleComplete);
+  //     return () => {
+  //       router.events.off("routerChangeStart", handleStart);
+  //       router.events.off("routerChangeError", handleComplete);
+  //       router.events.off("routerChangeComplete", handleComplete);
+  //     };
+  //   })
+  //   return loading && (
+
+  //   )
+  // }
 
   return (
     <>
@@ -144,7 +161,9 @@ export default function AuthModal() {
 
               <button
                 className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70"
-                onClick={handleSignUp}
+                onClick={() => {
+                  handleSignUp;
+                }}
               >
                 SignUp
               </button>
@@ -169,7 +188,9 @@ export default function AuthModal() {
                 <div className="flex justify-center w-full">
                   <button
                     className="flex items-center  bg-[#3a579d] w-full h-[40px] min-w-[180px] rounded-[4px] hover:opacity-70"
-                    onClick={handleGuestSignIn}
+                    onClick={() => {
+                      handleGuestSignIn;
+                    }}
                   >
                     {pageLoading ? (
                       <>
@@ -231,7 +252,9 @@ export default function AuthModal() {
 
                 <button
                   className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70 flex items-center justify-center"
-                  onClick={handleSignIn}
+                  onClick={() => {
+                    handleSignIn;
+                  }}
                 >
                   {pageLoading ? (
                     <>
