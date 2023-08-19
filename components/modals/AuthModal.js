@@ -37,17 +37,19 @@ export default function AuthModal() {
   }
 
   async function handleSignIn() {
+    setPageLoading(true);
     await signInWithEmailAndPassword(auth, email, password);
     setTimeout(() => {
-      setPageLoading(true);
+      // setPageLoading(true);
       router.push("/foryou");
     }, 2000);
   }
 
   async function handleGuestSignIn() {
+    setPageLoading(true);
     await signInWithEmailAndPassword(auth, "guest@gmail.com", "User12345");
     setTimeout(() => {
-      setPageLoading(true);
+      // setPageLoading(true);
       router.push("/foryou");
     }, 2000);
   }
@@ -62,6 +64,7 @@ export default function AuthModal() {
           uid: currentUser.uid,
         })
       );
+      // router.push("/foryou");
     });
 
     return unsubscribe;
@@ -71,30 +74,7 @@ export default function AuthModal() {
     router.push("/foryou");
     setPageLoading(true);
   }
-  // function Loading() {
-  //   const router = useRouter();
-  //   const [loading, setLoading] = useState(false);
-  //   useEffect(() => {
-  //     const handleStart = (url) => url !== router.asPath && setLoading(true);
-  //     const handleComplete = (url) =>
-  //       url === router.asPath &&
-  //       setTimeout(() => {
-  //         setLoading(false), 5000;
-  //       });
-
-  //     router.events.on("routerChangeStart", handleStart);
-  //     router.events.on("routerChangeError", handleComplete);
-  //     router.events.on("routerChangeComplete", handleComplete);
-  //     return () => {
-  //       router.events.off("routerChangeStart", handleStart);
-  //       router.events.off("routerChangeError", handleComplete);
-  //       router.events.off("routerChangeComplete", handleComplete);
-  //     };
-  //   })
-  //   return loading && (
-
-  //   )
-  // }
+  
 
   return (
     <>
