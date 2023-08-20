@@ -22,19 +22,31 @@ export default function AuthModal() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState();
-  const [pageLoading, setPageLoading] = useState(false);
+  const [guestPageLoading, setGuestPageLoading] = useState(false);
+  const [userPageLoading, setUserPageLoading] = useState(false);
 
-  async function handleSignUp() {
-    const userCredentials = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    setTimeout(() => {
-      setPageLoading(true);
-      router.push("/foryou");
-    }, 2000);
+  async function handleGuestButton() {
+    setGuestPageLoading(true);
+    await signInWithEmailAndPassword(auth, "guest@gmail.com", "User12345");
+    console.log(guestPageLoading);
+    setTimeout(() => router.push("/foryou"), 2000);
+    console.log(guestPageLoading);
+    // setGuestPageLoading(false);
   }
+
+  // async function handleSignUp() {
+  //   setPageLoading(true);
+
+  //   const userCredentials = await createUserWithEmailAndPassword(
+  //     auth,
+  //     email,
+  //     password
+  //   );
+  //   setTimeout(() => {
+  //     setPageLoading(true);
+  //     router.push("/foryou");
+  //   }, 2000);
+  // }
 
   async function handleSignIn() {
     setPageLoading(true);
@@ -69,12 +81,6 @@ export default function AuthModal() {
 
     return unsubscribe;
   }, []);
-
-  function forYouPage() {
-    router.push("/foryou");
-    setPageLoading(true);
-  }
-  
 
   return (
     <>
@@ -141,9 +147,7 @@ export default function AuthModal() {
 
               <button
                 className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70"
-                onClick={() => {
-                  handleSignUp;
-                }}
+                onClick={handleGuestButton}
               >
                 SignUp
               </button>
@@ -168,11 +172,9 @@ export default function AuthModal() {
                 <div className="flex justify-center w-full">
                   <button
                     className="flex items-center  bg-[#3a579d] w-full h-[40px] min-w-[180px] rounded-[4px] hover:opacity-70"
-                    onClick={() => {
-                      handleGuestSignIn;
-                    }}
+                    onClick={handleGuestButton}
                   >
-                    {pageLoading ? (
+                    {guestPageLoading ? (
                       <>
                         <div className="w-full flex justify-center">
                           <CircularProgress
@@ -236,7 +238,7 @@ export default function AuthModal() {
                     handleSignIn;
                   }}
                 >
-                  {pageLoading ? (
+                  {userPageLoading ? (
                     <>
                       <CircularProgress
                         size="2rem"
