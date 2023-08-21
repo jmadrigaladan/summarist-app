@@ -24,6 +24,9 @@ export default function AuthModal() {
   const [password, setPassword] = useState();
   const [guestPageLoading, setGuestPageLoading] = useState(false);
   const [userPageLoading, setUserPageLoading] = useState(false);
+  const [signUpLoading, setSignUpLoading] = useState(false);
+  const [signUpErrorCode, setSignUpErrorCode] = useState(null);
+  const [logInErrorCode, setLogInErrorCode] = useState(null);
 
   async function handleGuestButton() {
     setGuestPageLoading(true);
@@ -34,32 +37,54 @@ export default function AuthModal() {
     // setGuestPageLoading(false);
   }
 
-  // async function handleSignUp() {
-  //   setPageLoading(true);
+  async function handleSignUp() {
+    setSignUpLoading(true);
+    console.log("sign up");
 
-  //   const userCredentials = await createUserWithEmailAndPassword(
-  //     auth,
-  //     email,
-  //     password
-  //   );
-  //   setTimeout(() => {
-  //     setPageLoading(true);
-  //     router.push("/foryou");
-  //   }, 2000);
-  // }
+    const user = await createUserWithEmailAndPassword(auth, email, password)
+      .then((u) => {})
+      .catch((error) => {
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            setTimeout(() => {
+              setSignUpLoading(false);
+              setSignUpErrorCode(
+                "User with email already exists. Please Log In"
+              );
+            }, 2000);
+            break;
+          case "auth/invalid-email":
+            setTimeout(() => {
+              setSignUpLoading(false);
+              setSignUpErrorCode(error.code);
+            }, 2000);
+            break;
+          case "auth/operation-not-allowed":
+            setTimeout(() => {
+              setSignUpLoading(false);
+              setSignUpErrorCode(error.code);
+            }, 2000);
+            break;
+          case "auth/weak-password":
+            setTimeout(() => {
+              setSignUpLoading(false);
+              setSignUpErrorCode(error.code);
+            }, 2000);
+            break;
+          default:
+            console.log(error.message);
+            break;
+        }
+      });
+    console.log(signUpErrorCode);
+    // if (signUpErrorCode === null) {
+    //   setTimeout(() => router.push("/foryou"), 2000);
+    // }
+  }
 
   async function handleSignIn() {
     setPageLoading(true);
     await signInWithEmailAndPassword(auth, email, password);
-    setTimeout(() => {
-      // setPageLoading(true);
-      router.push("/foryou");
-    }, 2000);
-  }
-
-  async function handleGuestSignIn() {
-    setPageLoading(true);
-    await signInWithEmailAndPassword(auth, "guest@gmail.com", "User12345");
     setTimeout(() => {
       // setPageLoading(true);
       router.push("/foryou");
@@ -124,11 +149,18 @@ export default function AuthModal() {
                   <div className="text-white">Sign up with Google</div>
                 </button>
               </div>
-              <div className="my-[16px] flex items-center justify-between w-full">
+              <div className="my-[12px] flex items-center justify-between w-full">
                 <hr className="w-[40%] h-[8px] text-[#bac8ce]" />
                 or
                 <hr className="w-[40%] h-[8px] text-[#bac8ce]" />
               </div>
+              {signUpErrorCode ? (
+                <div className="mb-[4px]">
+                  <div className="text-red-500">{signUpErrorCode}</div>
+                </div>
+              ) : (
+                <> </>
+              )}
 
               <div className="w-full ">
                 <input
@@ -147,9 +179,23 @@ export default function AuthModal() {
 
               <button
                 className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70"
-                onClick={handleGuestButton}
+                onClick={handleSignUp}
               >
-                SignUp
+                {signUpLoading ? (
+                  <>
+                    <div className="w-full flex justify-center">
+                      <CircularProgress
+                        size="2rem"
+                        style={{ color: "white" }}
+                        className="flex justify-center"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-white text-center">SignUp</div>
+                  </>
+                )}
               </button>
 
               <div className="w-full text-center text-[#116be9] text-[14px] font-light mt-[24px] cursor-pointer">
