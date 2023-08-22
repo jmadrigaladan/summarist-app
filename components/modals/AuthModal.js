@@ -31,16 +31,11 @@ export default function AuthModal() {
   async function handleGuestButton() {
     setGuestPageLoading(true);
     await signInWithEmailAndPassword(auth, "guest@gmail.com", "User12345");
-    console.log(guestPageLoading);
     setTimeout(() => router.push("/foryou"), 2000);
-    console.log(guestPageLoading);
-    // setGuestPageLoading(false);
   }
 
   async function handleSignUp() {
     setSignUpLoading(true);
-    console.log("sign up");
-
     const user = await createUserWithEmailAndPassword(auth, email, password)
       .then((u) => {})
       .catch((error) => {
@@ -48,15 +43,13 @@ export default function AuthModal() {
           case "auth/email-already-in-use":
             setTimeout(() => {
               setSignUpLoading(false);
-              setSignUpErrorCode(
-                "User with email already exists. Please Log In"
-              );
+              setSignUpErrorCode("User with email already exists");
             }, 2000);
             break;
           case "auth/invalid-email":
             setTimeout(() => {
               setSignUpLoading(false);
-              setSignUpErrorCode(error.code);
+              setSignUpErrorCode("Please use a valid email");
             }, 2000);
             break;
           case "auth/operation-not-allowed":
@@ -83,12 +76,24 @@ export default function AuthModal() {
   }
 
   async function handleSignIn() {
-    setPageLoading(true);
-    await signInWithEmailAndPassword(auth, email, password);
-    setTimeout(() => {
-      // setPageLoading(true);
-      router.push("/foryou");
-    }, 2000);
+    setUserPageLoading(true);
+    console.log("logging in");
+    const logIn = await signInWithEmailAndPassword(auth, email, password)
+      .then((u) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    // let signInMethods = await fetchSignInMethodsForEmail(auth, email);
+    // if (signInMethods.length > 0) {
+    //   //user exists
+    //   await signInWithEmailAndPassword(auth, email, password);
+    // } else {
+    //   //user does not exist
+    // }
+    // setTimeout(() => {
+    //   // setPageLoading(true);
+    //   router.push("/foryou");
+    // }, 2000);
   }
 
   useEffect(() => {
@@ -101,7 +106,6 @@ export default function AuthModal() {
           uid: currentUser.uid,
         })
       );
-      // router.push("/foryou");
     });
 
     return unsubscribe;
@@ -268,21 +272,19 @@ export default function AuthModal() {
                     className="w-full h-[40px] rounded-md bg-transparent border-[2px] border-[#bac8ce] p-4 focus:outline-none focus:border-[#2bd97c]"
                     placeholder="Email Address"
                     type="email"
-                    onChange={() => {}}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <input
                     className="w-full h-[40px] mt-[16px] rounded-md bg-transparent border-[2px] border-[#bac8ce] p-4 focus:outline-none focus:border-[#2bd97c]"
                     placeholder="Password"
                     type="password"
-                    onChange={() => {}}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
                 <button
                   className="bg-[#2bd97c] w-full rounded-md h-[40px] mt-[16px] hover:opacity-70 flex items-center justify-center"
-                  onClick={() => {
-                    handleSignIn;
-                  }}
+                  onClick={handleSignIn}
                 >
                   {userPageLoading ? (
                     <>
