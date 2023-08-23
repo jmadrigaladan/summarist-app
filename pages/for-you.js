@@ -1,7 +1,9 @@
+import Sidebar from "@/components/SideBar";
+
 export default function foryou() {
   return (
     <div>
-      <h1>For you page</h1>
+      <Sidebar />
     </div>
   );
 }

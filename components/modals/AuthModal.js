@@ -31,7 +31,7 @@ export default function AuthModal() {
   async function handleGuestButton() {
     setGuestPageLoading(true);
     await signInWithEmailAndPassword(auth, "guest@gmail.com", "User12345");
-    setTimeout(() => router.push("/foryou"), 2000);
+    setTimeout(() => router.push("/for-you"), 2000);
   }
 
   async function handleSignUp() {
@@ -40,7 +40,7 @@ export default function AuthModal() {
     const user = await createUserWithEmailAndPassword(auth, email, password)
       .then((u) => {})
       .catch((error) => {
-        signUpErrorMessage = error;
+        logInErrorMessage = error;
         setTimeout(() => {
           setSignUpLoading(false);
           setSignUpErrorCode(String(error).split(" ").splice(1).join(" "));
@@ -48,7 +48,7 @@ export default function AuthModal() {
       });
 
     if (!signUpErrorMessage) {
-      setTimeout(() => router.push("/foryou"), 2000);
+      setTimeout(() => router.push("/for-you"), 2000);
     }
   }
 
@@ -66,7 +66,7 @@ export default function AuthModal() {
       });
 
     if (!logInErrorMessage) {
-      setTimeout(() => router.push("/foryou"), 2000);
+      setTimeout(() => router.push("/for-you"), 2000);
     }
   }
 
