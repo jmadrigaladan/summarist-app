@@ -35,65 +35,39 @@ export default function AuthModal() {
   }
 
   async function handleSignUp() {
+    let signUpErrorMessage;
     setSignUpLoading(true);
     const user = await createUserWithEmailAndPassword(auth, email, password)
       .then((u) => {})
       .catch((error) => {
-        switch (error.code) {
-          case "auth/email-already-in-use":
-            setTimeout(() => {
-              setSignUpLoading(false);
-              setSignUpErrorCode("User with email already exists");
-            }, 2000);
-            break;
-          case "auth/invalid-email":
-            setTimeout(() => {
-              setSignUpLoading(false);
-              setSignUpErrorCode("Please use a valid email");
-            }, 2000);
-            break;
-          case "auth/operation-not-allowed":
-            setTimeout(() => {
-              setSignUpLoading(false);
-              setSignUpErrorCode(error.code);
-            }, 2000);
-            break;
-          case "auth/weak-password":
-            setTimeout(() => {
-              setSignUpLoading(false);
-              setSignUpErrorCode(error.code);
-            }, 2000);
-            break;
-          default:
-            console.log(error.message);
-            break;
-        }
+        signUpErrorMessage = error;
+        setTimeout(() => {
+          setSignUpLoading(false);
+          setSignUpErrorCode(String(error).split(" ").splice(1).join(" "));
+        }, 2000);
       });
-    console.log(signUpErrorCode);
-    // if (signUpErrorCode === null) {
-    //   setTimeout(() => router.push("/foryou"), 2000);
-    // }
+
+    if (!signUpErrorMessage) {
+      setTimeout(() => router.push("/foryou"), 2000);
+    }
   }
 
   async function handleSignIn() {
     setUserPageLoading(true);
-    console.log("logging in");
+    let logInErrorMessage;
     const logIn = await signInWithEmailAndPassword(auth, email, password)
       .then((u) => {})
       .catch((error) => {
-        console.log(error);
+        logInErrorMessage = error;
+        setTimeout(() => {
+          setUserPageLoading(false);
+          setLogInErrorCode(String(error).split(" ").splice(1).join(" "));
+        }, 2000);
       });
-    // let signInMethods = await fetchSignInMethodsForEmail(auth, email);
-    // if (signInMethods.length > 0) {
-    //   //user exists
-    //   await signInWithEmailAndPassword(auth, email, password);
-    // } else {
-    //   //user does not exist
-    // }
-    // setTimeout(() => {
-    //   // setPageLoading(true);
-    //   router.push("/foryou");
-    // }, 2000);
+
+    if (!logInErrorMessage) {
+      setTimeout(() => router.push("/foryou"), 2000);
+    }
   }
 
   useEffect(() => {
@@ -266,6 +240,13 @@ export default function AuthModal() {
                   or
                   <hr className="w-[40%] h-[8px] text-[#bac8ce]" />
                 </div>
+                {logInErrorCode ? (
+                  <div className="mb-[4px]">
+                    <div className="text-red-500">{logInErrorCode}</div>
+                  </div>
+                ) : (
+                  <> </>
+                )}
 
                 <div className="w-full ">
                   <input
