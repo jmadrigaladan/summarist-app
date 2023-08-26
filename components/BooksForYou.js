@@ -1,7 +1,13 @@
 import Link from "next/link";
+import { FiClock } from "react-icons/fi";
+import { AiOutlineStar } from "react-icons/ai";
 
 import { AiFillPlayCircle } from "react-icons/ai";
-export default function BooksForYou({ selectedBooks, recommendedBooks }) {
+export default function BooksForYou({
+  selectedBooks,
+  recommendedBooks,
+  suggestedBooks,
+}) {
   return (
     <>
       <div className="w-full">
@@ -59,12 +65,35 @@ export default function BooksForYou({ selectedBooks, recommendedBooks }) {
                 </div>
                 {/* for you recommended books */}
                 <div className="flex overflow-x-auto snap-x gap-[16px] mb-[16px]">
-                  {recommendedBooks.map((book) => (
-                    <RecommendedBook
+                  {recommendedBooks.map((book, index) => (
+                    <DisplayBook
+                      key={index}
+                      bookId={book?.id}
                       bookTitle={book?.title}
                       bookImg={book?.imageLink}
                       booksubTitle={book?.subTitle}
                       author={book?.author}
+                      premium={book?.subscriptionRequired}
+                      avgRating={book?.averageRating}
+                    />
+                  ))}
+                </div>
+                <div className="text-[22px] font-bold text-[#032b41] mb-[16px]">
+                  Suggested for you
+                </div>
+                <div className="font-light mb-[16px]">Browse these Books</div>
+                {/* for you recommended books */}
+                <div className="flex overflow-x-auto snap-x gap-[16px] mb-[16px]">
+                  {suggestedBooks.map((book, index) => (
+                    <DisplayBook
+                      key={index}
+                      bookId={book?.id}
+                      bookTitle={book?.title}
+                      bookImg={book?.imageLink}
+                      booksubTitle={book?.subTitle}
+                      author={book?.author}
+                      premium={book?.subscriptionRequired}
+                      avgRating={book?.averageRating}
                     />
                   ))}
                 </div>
@@ -77,11 +106,28 @@ export default function BooksForYou({ selectedBooks, recommendedBooks }) {
   );
 }
 
-export function RecommendedBook({ bookTitle, bookImg, booksubTitle, author }) {
-  console.log("hi");
+export function DisplayBook({
+  bookTitle,
+  bookId,
+  bookImg,
+  booksubTitle,
+  author,
+  premium,
+  avgRating,
+}) {
   return (
     <>
-      <Link href={""} className="max-w-[200px] pt-[32px] px-[12px] pb-[12px]">
+      <Link
+        href={`book/${bookId}`}
+        className="max-w-[200px] pt-[32px] px-[12px] pb-[12px] hover:bg-[#f1f6f4] relative"
+      >
+        {premium ? (
+          <div className="w-[55px] absolute top-0 right-0 bg-[#032b41] h-[18px] flex items-center text-white text-[10px] px-[8px] rounded-[20px]">
+            Premium
+          </div>
+        ) : (
+          ""
+        )}
         <figure className="w-[172px] h-[172px]">
           <img className="w-full h-full" src={bookImg} alt="" />
         </figure>
@@ -98,11 +144,19 @@ export function RecommendedBook({ bookTitle, bookImg, booksubTitle, author }) {
           {booksubTitle}
         </div>
         {/* recommened book details wrapper */}
-        <div>
+        <div className="flex items-center gap-[8px]">
           {/* recommended book details */}
-          <div></div>
+          <div className="flex items-center gap-[4px]">
+            <FiClock className="w-[16px] h-[16px] text-[#6b757b]" />
+            <div className="text-[14px] text-[#6b757b] font-light ">02:34</div>
+          </div>
           {/* recommended book details */}
-          <div></div>
+          <div className="flex items-center gap-[4px]">
+            <AiOutlineStar className="w-[16px] h-[16px] text-[#6b757b]" />
+            <div className="text-[14px] text-[#6b757b] font-light">
+              {avgRating}
+            </div>
+          </div>
         </div>
       </Link>
     </>

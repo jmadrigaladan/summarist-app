@@ -3,26 +3,26 @@ import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/SideBar";
 
 export async function getServerSideProps() {
-  const [selectedRes, recommendedRes] = await Promise.all([
+  const [selectedRes, recommendedRes, suggestedRes] = await Promise.all([
     fetch(
       "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
     ),
     fetch(
       "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
     ),
+    fetch(
+      "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
+    ),
   ]);
-  const [selected, recommended] = await Promise.all([
+  const [selected, recommended, suggested] = await Promise.all([
     selectedRes.json(),
     recommendedRes.json(),
+    suggestedRes.json(),
   ]);
-  return { props: { selected, recommended } };
+  return { props: { selected, recommended, suggested } };
 }
-// const res = await fetch(
-//   "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected"
-// );
-// const data = await res.json();
-// const formattedData = {
-//   id: JSON.stringify(data.id),
+
+//   id: data.id,
 //   author: data.author,
 //   title: data.title,
 //   subTitle: data.subTitle,
@@ -37,20 +37,18 @@ export async function getServerSideProps() {
 //   summary: data.summary,
 //   tags: data.tags,
 //   bookDescription: data.bookDescription,
-//   authorDescription: data.authorDescription,
-// };
-// return {
-//   props: {
-//     selectedBook: data,
-//   },
-// };
-// };
-export default function foryou({ selected, recommended }) {
+//   authorDescription: data.authorDescription
+
+export default function foryou({ selected, recommended, suggested }) {
   return (
     <div className="w-full ">
       <Sidebar />
       <SearchBar />
-      <BooksForYou selectedBooks={selected[0]} recommendedBooks={recommended} />
+      <BooksForYou
+        selectedBooks={selected[0]}
+        recommendedBooks={recommended}
+        suggestedBooks={suggested}
+      />
     </div>
   );
 }
