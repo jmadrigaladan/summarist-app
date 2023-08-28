@@ -1,7 +1,12 @@
 import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/SideBar";
 import { AiOutlineStar } from "react-icons/ai";
-import { HiOutlineMicrophone } from "react-icons/hi";
+import { BiMicrophone } from "react-icons/bi";
+import { BsBook, BsBookmark } from "react-icons/bs";
+import { FiClock } from "react-icons/fi";
+import { HiOutlineLightBulb, HiOutlineMicrophone } from "react-icons/hi";
+import { useSelector, useDispatch } from "react-redux";
+import { openAuthModal } from "@/redux/modalSlice";
 
 export async function getServerSideProps(context) {
   const bookRes = await fetch(
@@ -12,7 +17,19 @@ export async function getServerSideProps(context) {
 }
 
 export default function BookPage({ bookData }) {
-  console.log(bookData);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  function handlePlayer(e) {
+    e.stopPropagation();
+    console.log(user.email);
+    if (!user.email) {
+      console.log("open auth modal");
+      dispatch(openAuthModal());
+      return;
+    }
+  }
+  // console.log(user);
   return (
     <div className="w-full">
       <Sidebar />
@@ -39,7 +56,7 @@ export default function BookPage({ bookData }) {
                   {bookData?.subTitle}
                 </div>
                 {/* innerbook wraper */}
-                <div className="border-solid border-y p-[16px]">
+                <div className="border-solid border-y p-[16px] mb-[24px]">
                   {/* innerbook description wrapper */}
                   <div className="flex flex-wrap max-w-[400px] gap-y-[12px]">
                     {/* innerbook description */}
@@ -49,22 +66,72 @@ export default function BookPage({ bookData }) {
                       {bookData.totalRating} ratings)
                     </div>
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
-                      <AiOutlineStar className="w-[24px] h-[24px] mr-[4px]" />
-                      <div className="mr-[4px]">{bookData.averageRating}</div>(
-                      {bookData.totalRating} ratings)
+                      <FiClock className="w-[24px] h-[24px] mr-[4px]" />
+                      <div className="mr-[4px]">03:24</div>
                     </div>
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
                       <HiOutlineMicrophone className="w-[24px] h-[24px] mr-[4px]" />
-                       <div className="mr-[4px]">{bookData.type}</div>
+                      <div className="mr-[4px]">{bookData.type}</div>
                     </div>
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
-                      <AiOutlineStar className="w-[24px] h-[24px] mr-[4px]" />
-                      <div className="mr-[4px]">{bookData.averageRating}</div>(
-                      {bookData.totalRating} ratings)
+                      <HiOutlineLightBulb className="w-[24px] h-[24px] mr-[4px]" />
+                      <div className="mr-[4px]">
+                        {bookData.keyIdeas} Key ideas
+                      </div>
                     </div>
                   </div>
                 </div>
+                {/* inner book read btn wrapper */}
+                <div className="flex gap-[16px] mb-[24px] text-white">
+                  <button
+                    onClick={handlePlayer}
+                    className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
+                  >
+                    <BsBook className="w-[24px] h-[24px]" />
+                    <div className="text-[16px]">Read</div>
+                  </button>
+                  <button
+                    onClick={handlePlayer}
+                    className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
+                  >
+                    <BiMicrophone className="w-[24px] h-[24px]" />
+                    <div className="text-[16px]">Listen</div>
+                  </button>
+                </div>
+                {/* inner book bookMark */}
+                <div className="flex items-center gap-[8px] text-[#0365f2] font-medium cursor-pointer mb-[40px] text-[18px] hover:text-[#044298] font-semibold ">
+                  <BsBookmark className="w-[20px] h-[20px]" />
+                  <div>Add title to My Library</div>
+                </div>
+                {/* inner book secondary title */}
+                <div className="text-[18px] mb-[16px] text-[#032b42] font-semibold">
+                  What's it about?
+                </div>
+                {/* inner__book tags wrapper */}
+                <div className="flex flex-wrap gap-[16px] mb-[16px]">
+                  {/* inner book tag */}
+                  <div className="bg-[#f1f6f4] text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
+                    {bookData?.tags[0]}
+                  </div>
+                  <div className="bg-[#f1f6f4] text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
+                    {bookData?.tags[1]}
+                  </div>
+                </div>
+
+                {/* inner book description */}
+                <div className="text-[#023b41] mb-[16px] leading-normal">
+                  {bookData?.bookDescription}
+                </div>
+                {/* inner book secondary title */}
+                <div className="text-[18px] mb-[16px] text-[#032b42] font-semibold">
+                  About the author
+                </div>
+                {/* author description */}
+                <div className="text-[#023b41] mb-[16px] leading-normal">
+                  {bookData?.authorDescription}
+                </div>
               </div>
+              {/*                BOOK IMAGE */}
               {/* inner__book img__wrapper */}
               <div className="">
                 <figure className="h-[300px] w-[300px] min-w-[300px]">

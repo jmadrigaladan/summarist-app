@@ -93,7 +93,6 @@ export default function AuthModal() {
       >
         Login
       </li>
-      {}
       <Modal
         open={isOpen}
         onClose={() => dispatch(closeAuthModal())}

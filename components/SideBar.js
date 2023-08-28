@@ -7,11 +7,17 @@ import { usePathname } from "next/navigation";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { RiBallPenLine } from "react-icons/ri";
 import { SlSettings } from "react-icons/sl";
-import { FiLogIn, FiLogOut } from "react-icons/fi";
+import { FiLogIn } from "react-icons/fi";
+import { useSelector, useDispatch } from "react-redux";
+import { openAuthModal } from "@/redux/modalSlice";
 import Link from "next/link";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const user = useSelector((state) => state.user);
+  console.log(user);
+  const dispatch = useDispatch();
+
   return (
     <>
       <div className="bg-[#f7faf9] w-[200px] h-screen fixed ">
@@ -81,13 +87,20 @@ export default function Sidebar() {
                 <div>Help & Support</div>
               </div>
             </Link>
-            <Link href={"/"}>
-              <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
-                <div className="w-[5px]  h-[56px] mr-[16px]"></div>
-                <FiLogIn className="w-[24px] h-[24px] mr-[8px]" />
-                <div>Login</div>
-              </div>
-            </Link>
+            <div
+              className="flex items-center h-[56px] hover:bg-[#f0efef] cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!user.email) {
+                  dispatch(openAuthModal());
+                  return;
+                }
+              }}
+            >
+              <div className="w-[5px]  h-[56px] mr-[16px]"></div>
+              <FiLogIn className="w-[24px] h-[24px] mr-[8px]" />
+              <div>Login</div>
+            </div>
           </div>
         </div>
       </div>
