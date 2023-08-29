@@ -1,7 +1,11 @@
 import BooksForYou from "@/components/BooksForYou";
 import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/SideBar";
-
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/userSlice";
 export async function getServerSideProps() {
   const [selectedRes, recommendedRes, suggestedRes] = await Promise.all([
     fetch(
@@ -22,24 +26,22 @@ export async function getServerSideProps() {
   return { props: { selected, recommended, suggested } };
 }
 
-//   id: data.id,
-//   author: data.author,
-//   title: data.title,
-//   subTitle: data.subTitle,
-//   imageLink: data.imageLink,
-//   audioLink: data.audioLink,
-//   totalRating: data.totalRating,
-//   averageRating: data.averageRating,
-//   keyIdeas: data.keyIdeas,
-//   type: data.type,
-//   status: data.status,
-//   subscriptionRequired: data.subscriptionRequired,
-//   summary: data.summary,
-//   tags: data.tags,
-//   bookDescription: data.bookDescription,
-//   authorDescription: data.authorDescription
-
 export default function foryou({ selected, recommended, suggested }) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) return;
+      dispatch(
+        setUser({
+          email: currentUser.email,
+          uid: currentUser.uid,
+        })
+      );
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <div className="w-full ">
       <Sidebar />
