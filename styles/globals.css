@@ -40,17 +40,8 @@ button:disabled {
   cursor: not-allowed;
   opacity: 0.65;
 }
-
-.row {
-  max-width: 1070px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.container {
-  padding: 40px 0;
-  width: 100%;
+.fillWhiteSvg path {
+  stroke: white;
 }
 
 .btn {

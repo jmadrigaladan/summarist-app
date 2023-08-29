@@ -58,7 +58,7 @@ export default function Sidebar() {
             <img className="" src={"/assets/logo.png"} alt="" />
           </figure>
         </div>
-        <div className="flex flex-col justify-between pb-[20px]">
+        <div className="flex flex-col justify-between pb-[20px] flex-1">
           {/* sidebar wrapper */}
           <div className="mt-[40px]">
             {/* sidebar top */}
@@ -99,7 +99,7 @@ export default function Sidebar() {
               </div>
             </Link>
           </div>
-          <div className="mt-[240px]">
+          <div className="mt-[180px]">
             {/* sidebar bottom */}
             <Link href={"/settings"}>
               <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
