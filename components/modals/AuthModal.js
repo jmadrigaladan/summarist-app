@@ -13,6 +13,7 @@ import { auth } from "@/firebase";
 import { useEffect, useState } from "react";
 import { setUser } from "@/redux/userSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { usePathname } from "next/navigation";
 
 export default function AuthModal() {
   const isOpen = useSelector((state) => state.modals.authModalOpen);
@@ -27,11 +28,19 @@ export default function AuthModal() {
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [signUpErrorCode, setSignUpErrorCode] = useState(null);
   const [logInErrorCode, setLogInErrorCode] = useState(null);
+  const pathname = usePathname();
+
+  function checkHomePage() {
+    return pathname === "/";
+  }
 
   async function handleGuestButton() {
     setGuestPageLoading(true);
     await signInWithEmailAndPassword(auth, "guest@gmail.com", "User12345");
-    setTimeout(() => router.push("/for-you"), 2000);
+    if (checkHomePage()) {
+      setTimeout(() => router.push("/for-you"), 2000);
+    }
+    dispatch(closeAuthModal());
   }
 
   async function handleSignUp() {
@@ -47,9 +56,10 @@ export default function AuthModal() {
         }, 2000);
       });
 
-    if (!signUpErrorMessage) {
+    if (!signUpErrorMessage && checkHomePage()) {
       setTimeout(() => router.push("/for-you"), 2000);
     }
+    dispatch(closeAuthModal());
   }
 
   async function handleSignIn() {
@@ -65,9 +75,10 @@ export default function AuthModal() {
         }, 2000);
       });
 
-    if (!logInErrorMessage) {
+    if (!logInErrorMessage && checkHomePage()) {
       setTimeout(() => router.push("/for-you"), 2000);
     }
+    dispatch(closeAuthModal());
   }
 
   useEffect(() => {
@@ -87,12 +98,6 @@ export default function AuthModal() {
 
   return (
     <>
-      <li
-        className="text-[#032b41] hover:text-[#2bd97c] cursor-pointer transition duration-100"
-        onClick={() => dispatch(openAuthModal())}
-      >
-        Login
-      </li>
       <Modal
         open={isOpen}
         onClose={() => dispatch(closeAuthModal())}

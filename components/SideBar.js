@@ -90,6 +90,7 @@ export default function Sidebar() {
             <div
               className="flex items-center h-[56px] hover:bg-[#f0efef] cursor-pointer"
               onClick={(e) => {
+                console.log("clicked");
                 e.stopPropagation();
                 if (!user.email) {
                   dispatch(openAuthModal());

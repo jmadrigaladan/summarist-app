@@ -1,5 +1,8 @@
 import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/SideBar";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import AuthModal from "@/components/modals/AuthModal";
 import { AiOutlineStar } from "react-icons/ai";
 import { BiMicrophone } from "react-icons/bi";
 import { BsBook, BsBookmark } from "react-icons/bs";
@@ -17,19 +20,18 @@ export async function getServerSideProps(context) {
 }
 
 export default function BookPage({ bookData }) {
+  const router = useRouter();
+  const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-
-  function handlePlayer(e) {
-    e.stopPropagation();
-    console.log(user.email);
+  function handlePlayer() {
     if (!user.email) {
-      console.log("open auth modal");
       dispatch(openAuthModal());
-      return;
+      setModalNeedsToOpen(true);
+    } else {
+      router.push(`/player/${bookData.id}`);
     }
   }
-  // console.log(user);
   return (
     <div className="w-full">
       <Sidebar />
@@ -83,6 +85,7 @@ export default function BookPage({ bookData }) {
                 </div>
                 {/* inner book read btn wrapper */}
                 <div className="flex gap-[16px] mb-[24px] text-white">
+                  {modalsNeedToOpen ? <AuthModal /> : <></>}
                   <button
                     onClick={handlePlayer}
                     className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
