@@ -1,7 +1,8 @@
 import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/SideBar";
-import { BsPlayFill } from "react-icons/bs";
+import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { GrBackTen, GrForwardTen } from "react-icons/gr";
+import { useState, useRef, useEffect } from "react";
 
 export async function getServerSideProps(context) {
   const bookRes = await fetch(
@@ -12,7 +13,38 @@ export async function getServerSideProps(context) {
 }
 
 export default function BookPlayer({ bookData }) {
-  console.log(bookData);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [timeProgress, setTimeProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef();
+  const progressBarRef = useRef();
+  console.log(audioRef);
+
+  const togglePlayPause = () => {
+    setIsPlaying((prev) => !prev);
+  };
+
+  const handleProgressChange = () => {
+    audioRef.current.currentTime = progressBarRef.current.value;
+  };
+
+  const onLoadedMetadata = () => {
+    // (audioRef.current.duration);
+    const seconds = audioRef.current.audio.duration;
+    console.log(seconds);
+    // setDuration(seconds);
+    // progressBarRef.current.max = seconds;
+  };
+
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying, audioRef]);
+
+  // console.log(bookData);
   return (
     <div className="w-full">
       <Sidebar />
@@ -56,6 +88,7 @@ export default function BookPlayer({ bookData }) {
             </div>
           </div>
           {/* audio controls wrapper */}
+
           <div className="w-[calc(100%/3)]">
             {/* audio controls */}
             <div className="flex items-center justify-center gap-[24px]">
@@ -65,8 +98,15 @@ export default function BookPlayer({ bookData }) {
                 <GrBackTen className="fillWhiteSvg w-[28px] h-[28px] stroke-white" />
               </button>
               {/* audio play btn */}
-              <button className="bg-white w-[40px] rounded-full h-[40px]">
-                <BsPlayFill className="w-[28px] h-[28px] text-[#042330] ml-[8px]" />
+              <button
+                className="bg-white w-[40px] rounded-full h-[40px]"
+                onClick={togglePlayPause}
+              >
+                {isPlaying ? (
+                  <BsPauseFill className="w-[28px] h-[28px] text-[#042330] ml-[6px]" />
+                ) : (
+                  <BsPlayFill className="w-[28px] h-[28px] text-[#042330] ml-[8px]" />
+                )}
               </button>
               {/* audio forward 10 secs btn */}
               <button>
@@ -75,7 +115,22 @@ export default function BookPlayer({ bookData }) {
             </div>
           </div>
           {/* audio progress wrapper */}
-          <div className="w-[calc(100%/3)]"></div>
+          <div className="w-[calc(100%/3)] flex items-center gap-[16px]">
+            <audio
+              src={bookData?.audioLink}
+              ref={audioRef}
+              onLoadedMetadata={onLoadedMetadata}
+            />
+            <div className="text-white text-[14px]">{timeProgress}</div>
+            <input
+              type="range"
+              ref={progressBarRef}
+              defaultValue="0"
+              onChange={handleProgressChange}
+            />
+            <div className="text-white text-[14px]">{duration}</div>
+            {/* <AudioPlayer audioFile={bookData?.audioLink} /> */}
+          </div>
         </div>
       </div>
     </div>
