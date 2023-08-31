@@ -2,7 +2,7 @@ import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/SideBar";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { GrBackTen, GrForwardTen } from "react-icons/gr";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 export async function getServerSideProps(context) {
   const bookRes = await fetch(
@@ -18,7 +18,18 @@ export default function BookPlayer({ bookData }) {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef();
   const progressBarRef = useRef();
-  console.log(audioRef);
+  const playAnimationRef = useRef();
+
+  const repeat = useCallback(() => {
+    const currentTime = audioRef?.current?.currentTime;
+    setTimeProgress(currentTime);
+    progressBarRef.current.value = currentTime;
+    progressBarRef.current.style.setProperty(
+      "--range-progress",
+      `${(progressBarRef.current.value / duration) * 100}%`
+    );
+    playAnimationRef.current = requestAnimationFrame(repeat);
+  }, []);
 
   const togglePlayPause = () => {
     setIsPlaying((prev) => !prev);
@@ -28,12 +39,23 @@ export default function BookPlayer({ bookData }) {
     audioRef.current.currentTime = progressBarRef.current.value;
   };
 
-  const onLoadedMetadata = () => {
-    // (audioRef.current.duration);
-    const seconds = audioRef.current.audio.duration;
-    console.log(seconds);
-    // setDuration(seconds);
-    // progressBarRef.current.max = seconds;
+  const skipForwardTenSecs = () => {
+    setTimeProgress((audioRef.current.currentTime += 10));
+  };
+
+  const skipBackTenSecs = () => {
+    setTimeProgress((audioRef.current.currentTime -= 10));
+  };
+
+  const formatTime = (time) => {
+    if (time && !isNaN(time)) {
+      const minutes = Math.floor(time / 60);
+      const formatMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(time % 60);
+      const formatSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${formatMinutes}:${formatSeconds}`;
+    }
+    return "00:00";
   };
 
   useEffect(() => {
@@ -42,14 +64,21 @@ export default function BookPlayer({ bookData }) {
     } else {
       audioRef.current.pause();
     }
-  }, [isPlaying, audioRef]);
+    playAnimationRef.current = requestAnimationFrame(repeat);
+  }, [isPlaying, audioRef, repeat]);
 
-  // console.log(bookData);
+  useEffect(() => {
+    if (audioRef) {
+      const seconds = audioRef.current.duration;
+      setDuration(audioRef.current.duration);
+      progressBarRef.current.max = seconds;
+    }
+  });
+
   return (
     <div className="w-full">
       <Sidebar />
       <SearchBar />
-
       {/* summary */}
       <div className="w-full overflow-y-auto h-[calc(100vh-160px)]">
         {/* audio book summary */}
@@ -93,7 +122,7 @@ export default function BookPlayer({ bookData }) {
             {/* audio controls */}
             <div className="flex items-center justify-center gap-[24px]">
               {/* audio back 10 secs btn */}
-              <button className="">
+              <button onClick={skipBackTenSecs}>
                 {/*  */}
                 <GrBackTen className="fillWhiteSvg w-[28px] h-[28px] stroke-white" />
               </button>
@@ -109,27 +138,24 @@ export default function BookPlayer({ bookData }) {
                 )}
               </button>
               {/* audio forward 10 secs btn */}
-              <button>
+              <button onClick={skipForwardTenSecs}>
                 <GrForwardTen className="fillWhiteSvg w-[28px] h-[28px] stroke-white" />
               </button>
             </div>
           </div>
           {/* audio progress wrapper */}
           <div className="w-[calc(100%/3)] flex items-center gap-[16px]">
-            <audio
-              src={bookData?.audioLink}
-              ref={audioRef}
-              onLoadedMetadata={onLoadedMetadata}
-            />
-            <div className="text-white text-[14px]">{timeProgress}</div>
+            <audio src={bookData?.audioLink} ref={audioRef} />
+            <div className="text-white text-[14px]">
+              {formatTime(timeProgress)}
+            </div>
             <input
               type="range"
               ref={progressBarRef}
               defaultValue="0"
               onChange={handleProgressChange}
             />
-            <div className="text-white text-[14px]">{duration}</div>
-            {/* <AudioPlayer audioFile={bookData?.audioLink} /> */}
+            <div className="text-white text-[14px]">{formatTime(duration)}</div>
           </div>
         </div>
       </div>
