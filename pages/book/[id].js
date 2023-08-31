@@ -1,6 +1,6 @@
 import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/SideBar";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import AuthModal from "@/components/modals/AuthModal";
 import { AiOutlineStar } from "react-icons/ai";
@@ -23,6 +23,10 @@ export default function BookPage({ bookData }) {
   const router = useRouter();
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const dispatch = useDispatch();
+  const audioRef = useRef();
+  const [duration, setDuration] = useState(0);
+  console.log(audioRef);
+
   const user = useSelector((state) => state.user);
   function handlePlayer() {
     if (!user.email) {
@@ -32,6 +36,26 @@ export default function BookPage({ bookData }) {
       router.push(`/player/${bookData.id}`);
     }
   }
+
+  useEffect(() => {
+    console.log(audioRef);
+    if (audioRef) {
+      const seconds = audioRef.current.duration;
+      setDuration(audioRef.current.duration);
+    }
+  }, []);
+
+  const formatTime = (time) => {
+    if (time && !isNaN(time)) {
+      const minutes = Math.floor(time / 60);
+      const formatMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(time % 60);
+      const formatSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${formatMinutes}:${formatSeconds}`;
+    }
+    return "00:00";
+  };
+
   return (
     <div className="w-full">
       <Sidebar />
@@ -69,7 +93,8 @@ export default function BookPage({ bookData }) {
                     </div>
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
                       <FiClock className="w-[24px] h-[24px] mr-[4px]" />
-                      <div className="mr-[4px]">03:24</div>
+                      <audio src={bookData?.audioLink} ref={audioRef} />
+                      <div className="mr-[4px]">{formatTime(duration)}</div>
                     </div>
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
                       <HiOutlineMicrophone className="w-[24px] h-[24px] mr-[4px]" />

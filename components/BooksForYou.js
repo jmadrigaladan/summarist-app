@@ -1,13 +1,33 @@
 import Link from "next/link";
 import { FiClock } from "react-icons/fi";
 import { AiOutlineStar } from "react-icons/ai";
-
+import { useState, useRef, useEffect } from "react";
+// import { useRouter } from "next/router";
 import { AiFillPlayCircle } from "react-icons/ai";
 export default function BooksForYou({
   selectedBooks,
   recommendedBooks,
   suggestedBooks,
 }) {
+  const audioRef = useRef();
+  const [duration, setDuration] = useState(0);
+
+  const selectedFormat = (time) => {
+    console.log(time);
+    if (time && !isNaN(time)) {
+      const minutes = Math.floor(time / 60);
+      const formatMinutes = minutes < 10 ? `${minutes}` : `${minutes}`;
+      const seconds = Math.floor(time % 60);
+      const formatSeconds = seconds < 10 ? `${seconds}` : `${seconds}`;
+      return `${formatMinutes} mins ${formatSeconds} secs`;
+    }
+    return "0 mins 0 secs";
+  };
+
+  useEffect(() => {
+    setDuration(audioRef.current.duration);
+  }, []);
+
   return (
     <>
       <div className="w-full">
@@ -25,7 +45,7 @@ export default function BooksForYou({
                 </div>
                 {/* Book Link */}
                 <Link
-                  href={"/"}
+                  href={`book/${selectedBooks.id}`}
                   className="flex justify-between w-[675px] bg-[#fbefd6] rounded-[4px] p-[24px] mb-[24px] gap-[24px]"
                 >
                   {/* selected book sub title */}
@@ -50,9 +70,11 @@ export default function BooksForYou({
                         {selectedBooks.author}
                       </div>
                       {/* selected book duration */}
-                      <div>
-                        <AiFillPlayCircle className="w-[48px] h-[48px]" />
-                        {selectedBooks.d}
+                      <div className="flex items-center">
+                        <AiFillPlayCircle className="w-[48px] h-[48px] mr-[4px]" />
+                        <div>{selectedFormat(duration)}</div>
+                        {/* <div>{console.log(duration)}</div> */}
+                        <audio src={selectedBooks?.audioLink} ref={audioRef} />
                       </div>
                     </div>
                   </div>
@@ -75,6 +97,7 @@ export default function BooksForYou({
                       author={book?.author}
                       premium={book?.subscriptionRequired}
                       avgRating={book?.averageRating}
+                      audioLink={book?.audioLink}
                     />
                   ))}
                 </div>
@@ -94,6 +117,7 @@ export default function BooksForYou({
                       author={book?.author}
                       premium={book?.subscriptionRequired}
                       avgRating={book?.averageRating}
+                      audioLink={book?.audioLink}
                     />
                   ))}
                 </div>
@@ -114,7 +138,31 @@ export function DisplayBook({
   author,
   premium,
   avgRating,
+  audioLink,
 }) {
+  const audioRef = useRef();
+  const [duration, setDuration] = useState(0);
+  // console.log(audioRef);
+
+  const formatTime = (time) => {
+    if (audioRef) {
+      if (time && !isNaN(time)) {
+        const minutes = Math.floor(time / 60);
+        const formatMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+        const seconds = Math.floor(time % 60);
+        const formatSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+        return `${formatMinutes}:${formatSeconds}`;
+      }
+    }
+    return "00:00";
+  };
+
+  useEffect(() => {
+    // console.log(audioRef);
+    if (audioRef) {
+      setDuration(audioRef.current.duration);
+    }
+  }, []);
   return (
     <>
       <Link
@@ -148,7 +196,10 @@ export function DisplayBook({
           {/* recommended book details */}
           <div className="flex items-center gap-[4px]">
             <FiClock className="w-[16px] h-[16px] text-[#6b757b]" />
-            <div className="text-[14px] text-[#6b757b] font-light ">02:34</div>
+            <audio src={audioLink} ref={audioRef} />
+            <div className="text-[14px] text-[#6b757b] font-light ">
+              {formatTime(duration)}
+            </div>
           </div>
           {/* recommended book details */}
           <div className="flex items-center gap-[4px]">
