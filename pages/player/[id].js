@@ -68,11 +68,9 @@ export default function BookPlayer({ bookData }) {
   }, [isPlaying, audioRef, repeat]);
 
   useEffect(() => {
-    if (audioRef) {
-      const seconds = audioRef.current.duration;
-      setDuration(audioRef.current.duration);
-      progressBarRef.current.max = seconds;
-    }
+    const seconds = audioRef.current.duration;
+    setDuration(audioRef.current.duration);
+    progressBarRef.current.max = seconds;
   });
 
   return (

@@ -21,11 +21,10 @@ export async function getServerSideProps(context) {
 
 export default function BookPage({ bookData }) {
   const router = useRouter();
-  const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const dispatch = useDispatch();
+  const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
-  console.log(audioRef);
 
   const user = useSelector((state) => state.user);
   function handlePlayer() {
@@ -38,11 +37,7 @@ export default function BookPage({ bookData }) {
   }
 
   useEffect(() => {
-    console.log(audioRef);
-    if (audioRef) {
-      const seconds = audioRef.current.duration;
-      setDuration(audioRef.current.duration);
-    }
+    setDuration(audioRef.current.duration);
   }, []);
 
   const formatTime = (time) => {
@@ -159,7 +154,6 @@ export default function BookPage({ bookData }) {
                   {bookData?.authorDescription}
                 </div>
               </div>
-              {/*                BOOK IMAGE */}
               {/* inner__book img__wrapper */}
               <div className="">
                 <figure className="h-[300px] w-[300px] min-w-[300px]">

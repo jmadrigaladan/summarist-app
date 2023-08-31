@@ -2,7 +2,6 @@ import Link from "next/link";
 import { FiClock } from "react-icons/fi";
 import { AiOutlineStar } from "react-icons/ai";
 import { useState, useRef, useEffect } from "react";
-// import { useRouter } from "next/router";
 import { AiFillPlayCircle } from "react-icons/ai";
 export default function BooksForYou({
   selectedBooks,
@@ -11,6 +10,9 @@ export default function BooksForYou({
 }) {
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
+  const onLoadedMetadata = () => {
+    setDuration(audioRef?.current?.duration);
+  };
 
   const selectedFormat = (time) => {
     console.log(time);
@@ -23,10 +25,6 @@ export default function BooksForYou({
     }
     return "0 mins 0 secs";
   };
-
-  useEffect(() => {
-    setDuration(audioRef.current.duration);
-  }, []);
 
   return (
     <>
@@ -74,7 +72,11 @@ export default function BooksForYou({
                         <AiFillPlayCircle className="w-[48px] h-[48px] mr-[4px]" />
                         <div>{selectedFormat(duration)}</div>
                         {/* <div>{console.log(duration)}</div> */}
-                        <audio src={selectedBooks?.audioLink} ref={audioRef} />
+                        <audio
+                          src={selectedBooks?.audioLink}
+                          ref={audioRef}
+                          onLoadedMetadata={onLoadedMetadata}
+                        />
                       </div>
                     </div>
                   </div>
@@ -142,27 +144,21 @@ export function DisplayBook({
 }) {
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
-  // console.log(audioRef);
-
   const formatTime = (time) => {
-    if (audioRef) {
-      if (time && !isNaN(time)) {
-        const minutes = Math.floor(time / 60);
-        const formatMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-        const seconds = Math.floor(time % 60);
-        const formatSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-        return `${formatMinutes}:${formatSeconds}`;
-      }
+    if (time && !isNaN(time)) {
+      const minutes = Math.floor(time / 60);
+      const formatMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(time % 60);
+      const formatSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${formatMinutes}:${formatSeconds}`;
     }
     return "00:00";
   };
 
   useEffect(() => {
-    // console.log(audioRef);
-    if (audioRef) {
-      setDuration(audioRef.current.duration);
-    }
+    setDuration(audioRef.current.duration);
   }, []);
+
   return (
     <>
       <Link
