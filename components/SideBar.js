@@ -26,7 +26,6 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const user = useSelector((state) => state.user);
-  const [fontSize, setFontSize] = useState("16px")
   const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -41,6 +40,7 @@ export default function Sidebar() {
 
     return unsubscribe;
   }, []);
+  const [fontSize, setFontSize] = useState("16px");
 
   async function handleSignOut() {
     await signOut(auth);
@@ -55,7 +55,7 @@ export default function Sidebar() {
   return (
     <>
       {modalsNeedToOpen ? <AuthModal /> : <></>}
-      <div className="bg-[#f7faf9] w-[200px] h-screen fixed ">
+      <div className="bg-[#f7faf9] w-[200px] h-screen fixed hidden md:inline">
         <div className="flex justify-center">
           <figure className="max-w-[160px] flex justify-center items-center mt-[20px]">
             <img className="" src={"/assets/logo.png"} alt="" />

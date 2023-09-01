@@ -48,7 +48,7 @@ export default function BooksForYou({
     <>
       <div className="w-full">
         {/* wrapper */}
-        <div className="ml-[200px] w-[calc(100%-200px)]">
+        <div className="md:ml-[200px] md:w-[calc(100%-200px)]">
           {/* row */}
           <div className="max-w-[1070px] w-full mx-auto px-[24px]">
             {/* Container */}
@@ -62,16 +62,16 @@ export default function BooksForYou({
                 {/* Book Link */}
                 <Link
                   href={`book/${selectedBooks.id}`}
-                  className="flex justify-between w-[675px] bg-[#fbefd6] rounded-[4px] p-[24px] mb-[24px] gap-[24px]"
+                  className="w-full flex-col md:flex-row flex justify-between lg:w-[675px] bg-[#fbefd6] rounded-[4px] p-[24px] mb-[24px] gap-[24px]"
                 >
                   {/* selected book sub title */}
-                  <div className="w-[40%] text-[16px] text-[]">
+                  <div className="w-full text-[14px] md:w-[40%] md:text-[16px]">
                     {selectedBooks.subTitle}
                   </div>
                   {/* selected book line */}
-                  <div className="w-[1px] bg-[#bac8ce]"></div>
+                  <div className="hidden md:inline-block w-[1px] bg-[#bac8ce]"></div>
                   {/* selected book content */}
-                  <div className="flex gap-[16px] w-[60%]">
+                  <div className="w-full flex gap-[16px] md:w-[60%]">
                     <figure className="h-[140px] w-[140px] min-w-[140px]">
                       <img src={selectedBooks.imageLink} alt="Book Image" />
                     </figure>
