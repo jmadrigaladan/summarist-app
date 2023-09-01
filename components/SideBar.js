@@ -4,7 +4,7 @@ import {
   AiOutlineQuestionCircle,
 } from "react-icons/ai";
 import { usePathname } from "next/navigation";
-import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmarkOutline, IoText } from "react-icons/io5";
 import { RiBallPenLine } from "react-icons/ri";
 import { SlSettings } from "react-icons/sl";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
@@ -19,11 +19,14 @@ import { useState } from "react";
 import AuthModal from "@/components/modals/AuthModal";
 import { setUser } from "@/redux/userSlice";
 import { signOut } from "firebase/auth";
+import { RxLetterCaseCapitalize } from "react-icons/rx";
+import { fontSize } from "@mui/system";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const user = useSelector((state) => state.user);
+  const [fontSize, setFontSize] = useState("16px")
   const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -84,21 +87,39 @@ export default function Sidebar() {
                 <div>My Library</div>
               </div>
             </Link>
-            <Link href={"/"} className="cursor-not-allowed">
+            <div className="cursor-not-allowed">
               <div className="flex items-center h-[56px] ">
                 <div className="w-[5px] h-[56px] mr-[16px]"></div>
                 <RiBallPenLine className="w-[24px] h-[24px] mr-[8px]" />
                 <div>Highlights</div>
               </div>
-            </Link>
-            <Link href={"/"} className="cursor-not-allowed">
+            </div>
+            <div className="cursor-not-allowed">
               <div className="flex items-center h-[56px] ">
                 <div className="w-[5px] h-[56px] mr-[16px]"></div>
                 <AiOutlineSearch className="w-[24px] h-[24px] mr-[8px]" />
                 <div>Search</div>
               </div>
-            </Link>
+            </div>
+            {/* font size wrapper */}
+            <div className="flex items-center h-[56px] text-[#032b41] ">
+              <div className="flex gap-[8px] ml-[24px] items-center">
+                <div className="border-b-[3px] border-[#2bd97c] cursor-pointer">
+                  <RxLetterCaseCapitalize className="w-[20px] h-[20px]" />
+                </div>
+                <div className="">
+                  <RxLetterCaseCapitalize className="w-[24px] h-[24px]" />
+                </div>
+                <div className="">
+                  <RxLetterCaseCapitalize className="w-[28px] h-[28px]" />
+                </div>
+                <div className="">
+                  <RxLetterCaseCapitalize className="w-[32px] h-[32px]" />
+                </div>
+              </div>
+            </div>
           </div>
+
           <div className="mt-[180px]">
             {/* sidebar bottom */}
             <Link href={"/settings"}>
@@ -112,13 +133,13 @@ export default function Sidebar() {
                 <div>Settings</div>
               </div>
             </Link>
-            <Link href={"/"} className="cursor-not-allowed">
+            <div className="cursor-not-allowed">
               <div className="flex items-center h-[56px] ">
                 <div className="w-[5px]  h-[56px] mr-[16px]"></div>
                 <AiOutlineQuestionCircle className="w-[24px] h-[24px] mr-[8px]" />
                 <div>Help & Support</div>
               </div>
-            </Link>
+            </div>
             {user.email ? (
               <>
                 <div

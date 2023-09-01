@@ -25,7 +25,6 @@ export default function BookPage({ bookData }) {
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
-
   const user = useSelector((state) => state.user);
   function handlePlayer() {
     if (!user.email) {
@@ -35,6 +34,24 @@ export default function BookPage({ bookData }) {
       router.push(`/player/${bookData.id}`);
     }
   }
+
+  const onLoadedMetadata = () => {
+    setDuration(audioRef.current.duration);
+  };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("loadedmetadata", onLoadedMetadata);
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener(
+          "loadedmetadata",
+          onLoadedMetadata
+        );
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setDuration(audioRef.current.duration);
@@ -89,6 +106,7 @@ export default function BookPage({ bookData }) {
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
                       <FiClock className="w-[24px] h-[24px] mr-[4px]" />
                       <audio src={bookData?.audioLink} ref={audioRef} />
+                      {console.log(duration)}
                       <div className="mr-[4px]">{formatTime(duration)}</div>
                     </div>
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">

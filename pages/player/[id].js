@@ -31,6 +31,12 @@ export default function BookPlayer({ bookData }) {
     playAnimationRef.current = requestAnimationFrame(repeat);
   }, []);
 
+  const onLoadedMetadata = () => {
+    const seconds = audioRef.current.duration;
+    setDuration(seconds);
+    progressBarRef.current.max = seconds;
+  };
+
   const togglePlayPause = () => {
     setIsPlaying((prev) => !prev);
   };
@@ -68,10 +74,25 @@ export default function BookPlayer({ bookData }) {
   }, [isPlaying, audioRef, repeat]);
 
   useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("loadedmetadata", onLoadedMetadata);
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener(
+          "loadedmetadata",
+          onLoadedMetadata
+        );
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const seconds = audioRef.current.duration;
-    setDuration(audioRef.current.duration);
+    setDuration(seconds);
     progressBarRef.current.max = seconds;
-  });
+  }, []);
 
   return (
     <div className="w-full">

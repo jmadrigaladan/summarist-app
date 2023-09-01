@@ -10,12 +10,30 @@ export default function BooksForYou({
 }) {
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
+
   const onLoadedMetadata = () => {
-    setDuration(audioRef?.current?.duration);
+    setDuration(audioRef.current.duration);
   };
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("loadedmetadata", onLoadedMetadata);
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener(
+          "loadedmetadata",
+          onLoadedMetadata
+        );
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    setDuration(audioRef.current.duration);
+  }, []);
+
   const selectedFormat = (time) => {
-    console.log(time);
     if (time && !isNaN(time)) {
       const minutes = Math.floor(time / 60);
       const formatMinutes = minutes < 10 ? `${minutes}` : `${minutes}`;
@@ -71,12 +89,7 @@ export default function BooksForYou({
                       <div className="flex items-center">
                         <AiFillPlayCircle className="w-[48px] h-[48px] mr-[4px]" />
                         <div>{selectedFormat(duration)}</div>
-                        {/* <div>{console.log(duration)}</div> */}
-                        <audio
-                          src={selectedBooks?.audioLink}
-                          ref={audioRef}
-                          onLoadedMetadata={onLoadedMetadata}
-                        />
+                        <audio src={selectedBooks?.audioLink} ref={audioRef} />
                       </div>
                     </div>
                   </div>
@@ -154,6 +167,24 @@ export function DisplayBook({
     }
     return "00:00";
   };
+
+  const onLoadedMetadata = () => {
+    setDuration(audioRef.current.duration);
+  };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("loadedmetadata", onLoadedMetadata);
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener(
+          "loadedmetadata",
+          onLoadedMetadata
+        );
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setDuration(audioRef.current.duration);
