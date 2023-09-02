@@ -98,83 +98,88 @@ export default function BookPlayer({ bookData }) {
     <div className="w-full">
       <Sidebar />
       <SearchBar />
-      {/* summary */}
-      <div className="w-full overflow-y-auto h-[calc(100vh-160px)]">
-        {/* audio book summary */}
-        <div className="whitespace-pre-line p-[24px] max-w-[800px] mx-auto">
-          {/* audio book summary title */}
-          <div className="text-[#032b41] text-[24px] border-b-[1px] border-[#e1e7ea] border-solid pb-[16px] leading-normal font-semibold mb-[32px]">
-            {bookData?.title}
-          </div>
-          {/* audio book summary text */}
-          <div className="whitespace-pre-line leading-[1.4] text-[#032b41]">
-            {bookData?.summary}
-          </div>
-        </div>
-        {/* audio wrapper */}
-        <div className="w-full h-[80px] mt-auto flex items-center justify-between bg-[#042330] px-[40px] fixed bottom-0 left-0 ">
-          {/* audio track wrapper */}
-          <div className="flex w-[calc(100%/3)] gap-[12px]">
-            {/* audio track img mask */}
-            <figure className="flex max-w-[48px]">
-              {/* book image wrapper */}
-              <figure className="h-[48px] w-[48px] min-w-[48px]">
-                {/* book img */}
-                <img
-                  className="w-full h-full"
-                  src={bookData.imageLink}
-                  alt=""
-                />
-              </figure>
-            </figure>
-            {/* audio track details wrapper */}
-            <div className="text-white text-[14px] flex flex-col gap-[4px] justify-center">
-              {/* audio track title */}
-              <div>{bookData?.title}</div>
-              {/* audio track author */}
-              <div className="text-[#bac8ce]">{bookData?.author}</div>
+      <div className="md:ml-[200px] md:w-[calc(100%-200px)]">
+        {/* summary */}
+        <div className="w-full overflow-y-auto h-[calc(100vh-280px)] md:h-[calc(100vh-180px)]">
+          {/* audio book summary */}
+          <div className="whitespace-pre-line p-[24px] max-w-[800px] mx-auto">
+            {/* audio book summary title */}
+            <div className="text-[#032b41] text-[20px] md:text-[24px] border-b-[1px] border-[#e1e7ea] border-solid pb-[16px] leading-normal font-semibold mb-[32px]">
+              {bookData?.title}
+            </div>
+            {/* audio book summary text */}
+            <div className="text-[14px] md:text-[18px] whitespace-pre-line leading-[1.4] text-[#032b41]">
+              {bookData?.summary}
             </div>
           </div>
-          {/* audio controls wrapper */}
 
-          <div className="w-[calc(100%/3)]">
-            {/* audio controls */}
-            <div className="flex items-center justify-center gap-[24px]">
-              {/* audio back 10 secs btn */}
-              <button onClick={skipBackTenSecs}>
-                {/*  */}
-                <GrBackTen className="fillWhiteSvg w-[28px] h-[28px] stroke-white" />
-              </button>
-              {/* audio play btn */}
-              <button
-                className="bg-white w-[40px] rounded-full h-[40px]"
-                onClick={togglePlayPause}
-              >
-                {isPlaying ? (
-                  <BsPauseFill className="w-[28px] h-[28px] text-[#042330] ml-[6px]" />
-                ) : (
-                  <BsPlayFill className="w-[28px] h-[28px] text-[#042330] ml-[8px]" />
-                )}
-              </button>
-              {/* audio forward 10 secs btn */}
-              <button onClick={skipForwardTenSecs}>
-                <GrForwardTen className="fillWhiteSvg w-[28px] h-[28px] stroke-white" />
-              </button>
+          {/* audio wrapper */}
+          <div className="h-[180px] py-[16px] px-[24px] w-full md:h-[80px] md:py-0 mt-auto flex-col md:flex-row flex items-center justify-between bg-[#042330] md:px-[40px] fixed bottom-0 left-0">
+            {/* audio track wrapper */}
+            <div className="flex justify-center w-full md:w-[calc(100%/3)] gap-[12px]">
+              {/* audio track img mask */}
+              <figure className="flex items-center max-w-[48px]">
+                {/* book image wrapper */}
+                <figure className="h-[48px] w-[48px] min-w-[48px]">
+                  {/* book img */}
+                  <img
+                    className="w-full h-full"
+                    src={bookData.imageLink}
+                    alt=""
+                  />
+                </figure>
+              </figure>
+              {/* audio track details wrapper */}
+              <div className="h-[48px] text-white text-[14px] flex flex-col gap-[4px] justify-center">
+                {/* audio track title */}
+                <div className="h-[48px] leading-tight">{bookData?.title}</div>
+                {/* audio track author */}
+                <div className="text-[#bac8ce]">{bookData?.author}</div>
+              </div>
             </div>
-          </div>
-          {/* audio progress wrapper */}
-          <div className="w-[calc(100%/3)] flex items-center gap-[16px]">
-            <audio src={bookData?.audioLink} ref={audioRef} />
-            <div className="text-white text-[14px]">
-              {formatTime(timeProgress)}
+            {/* audio controls wrapper */}
+
+            <div className="w-full md:w-[calc(100%/3)]">
+              {/* audio controls */}
+              <div className="flex items-center justify-center gap-[24px]">
+                {/* audio back 10 secs btn */}
+                <button onClick={skipBackTenSecs}>
+                  {/*  */}
+                  <GrBackTen className="fillWhiteSvg w-[28px] h-[28px] stroke-white" />
+                </button>
+                {/* audio play btn */}
+                <button
+                  className="bg-white w-[40px] rounded-full h-[40px]"
+                  onClick={togglePlayPause}
+                >
+                  {isPlaying ? (
+                    <BsPauseFill className="w-[28px] h-[28px] text-[#042330] ml-[6px]" />
+                  ) : (
+                    <BsPlayFill className="w-[28px] h-[28px] text-[#042330] ml-[8px]" />
+                  )}
+                </button>
+                {/* audio forward 10 secs btn */}
+                <button onClick={skipForwardTenSecs}>
+                  <GrForwardTen className="fillWhiteSvg w-[28px] h-[28px] stroke-white" />
+                </button>
+              </div>
             </div>
-            <input
-              type="range"
-              ref={progressBarRef}
-              defaultValue="0"
-              onChange={handleProgressChange}
-            />
-            <div className="text-white text-[14px]">{formatTime(duration)}</div>
+            {/* audio progress wrapper */}
+            <div className="w-full md:w-[calc(100%/3)] flex justify-center items-center gap-[16px]">
+              <audio src={bookData?.audioLink} ref={audioRef} />
+              <div className="text-white text-[14px]">
+                {formatTime(timeProgress)}
+              </div>
+              <input
+                type="range"
+                ref={progressBarRef}
+                defaultValue="0"
+                onChange={handleProgressChange}
+              />
+              <div className="text-white text-[14px]">
+                {formatTime(duration)}
+              </div>
+            </div>
           </div>
         </div>
       </div>

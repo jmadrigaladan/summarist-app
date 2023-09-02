@@ -102,25 +102,35 @@ export default function Sidebar() {
               </div>
             </div>
             {/* font size wrapper */}
-            <div className="flex items-center h-[56px] text-[#032b41] ">
-              <div className="flex gap-[8px] ml-[24px] items-center">
-                <div className="border-b-[3px] border-[#2bd97c] cursor-pointer">
-                  <RxLetterCaseCapitalize className="w-[20px] h-[20px]" />
+            {pathname.includes("/player") ? (
+              <>
+                <div className="flex items-center h-[56px] text-[#032b41] ">
+                  <div className="flex gap-[8px] ml-[24px] items-center">
+                    <div className="border-b-[3px] border-[#2bd97c] cursor-pointer">
+                      <RxLetterCaseCapitalize className="w-[20px] h-[20px]" />
+                    </div>
+                    <div className="">
+                      <RxLetterCaseCapitalize className="w-[24px] h-[24px]" />
+                    </div>
+                    <div className="">
+                      <RxLetterCaseCapitalize className="w-[28px] h-[28px]" />
+                    </div>
+                    <div className="">
+                      <RxLetterCaseCapitalize className="w-[32px] h-[32px]" />
+                    </div>
+                  </div>
                 </div>
-                <div className="">
-                  <RxLetterCaseCapitalize className="w-[24px] h-[24px]" />
-                </div>
-                <div className="">
-                  <RxLetterCaseCapitalize className="w-[28px] h-[28px]" />
-                </div>
-                <div className="">
-                  <RxLetterCaseCapitalize className="w-[32px] h-[32px]" />
-                </div>
-              </div>
-            </div>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
 
-          <div className="mt-[180px]">
+          <div
+            className={`${
+              pathname.includes("/player") ? "mt-[120px]" : "mt-[200px]"
+            }`}
+          >
             {/* sidebar bottom */}
             <Link href={"/settings"}>
               <div className="flex items-center h-[56px] hover:bg-[#f0efef]">

@@ -72,25 +72,25 @@ export default function BookPage({ bookData }) {
     <div className="w-full">
       <Sidebar />
       <SearchBar />
-      <div className="ml-[200px] w-[calc(100%-200px)]">
+      <div className="md:ml-[200px] md:w-[calc(100%-200px)]">
         {/* row */}
         <div className="max-w-[1070px] w-full mx-auto px-[24px]">
           {/* Container */}
           <div className="w-full py-[40px]">
             {/* inner__wrapper */}
-            <div className="flex gap-[16px]">
+            <div className="flex gap-[16px] flex-col-reverse lg:flex-row">
               {/* inner__book */}
               <div className="w-full">
                 {/* inner__book title */}
-                <div className="text-[#032b41] mb-[16px] font-bold text-[32px]">
+                <div className="text-[24px] text-[#032b41] mb-[16px] font-bold lg:text-[32px]">
                   {bookData?.title}
                 </div>
                 {/* inner__book author */}
-                <div className="text-[16px] text-[#032b41] font-bold mb-[16px]">
+                <div className="text-[14px] lg:text-[16px] text-[#032b41] font-bold mb-[16px]">
                   {bookData?.author}
                 </div>
                 {/* inner__book subtitle */}
-                <div className="font-light text-[#032b41] text-[20px] mb-[16px]">
+                <div className="text-[18px] font-light text-[#032b41] lg:text-[20px] mb-[16px]">
                   {bookData?.subTitle}
                 </div>
                 {/* innerbook wraper */}
@@ -151,16 +151,16 @@ export default function BookPage({ bookData }) {
                 {/* inner__book tags wrapper */}
                 <div className="flex flex-wrap gap-[16px] mb-[16px]">
                   {/* inner book tag */}
-                  <div className="bg-[#f1f6f4] text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
+                  <div className="bg-[#f1f6f4] text-[14px] lg:text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
                     {bookData?.tags[0]}
                   </div>
-                  <div className="bg-[#f1f6f4] text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
+                  <div className="bg-[#f1f6f4] text-[14px] lg:text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
                     {bookData?.tags[1]}
                   </div>
                 </div>
 
                 {/* inner book description */}
-                <div className="text-[#023b41] mb-[16px] leading-normal">
+                <div className="text-[#023b41] text-[14px] md:text-[16px] mb-[16px] leading-normal">
                   {bookData?.bookDescription}
                 </div>
                 {/* inner book secondary title */}
@@ -168,12 +168,12 @@ export default function BookPage({ bookData }) {
                   About the author
                 </div>
                 {/* author description */}
-                <div className="text-[#023b41] mb-[16px] leading-normal">
+                <div className="text-[#023b41] text-[14px] md:text-[16px] mb-[16px] leading-normal">
                   {bookData?.authorDescription}
                 </div>
               </div>
               {/* inner__book img__wrapper */}
-              <div className="">
+              <div className="flex justify-center ">
                 <figure className="h-[300px] w-[300px] min-w-[300px]">
                   <img src={bookData?.imageLink} alt="" />
                 </figure>

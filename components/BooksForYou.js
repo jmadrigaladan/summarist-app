@@ -86,8 +86,8 @@ export default function BooksForYou({
                         {selectedBooks.author}
                       </div>
                       {/* selected book duration */}
-                      <div className="flex items-center">
-                        <AiFillPlayCircle className="w-[48px] h-[48px] mr-[4px]" />
+                      <div className="flex items-center  text-[14px] md:text-[16px]">
+                        <AiFillPlayCircle className="w-[48px] h-[48px] mr-[4px] " />
                         <div>{selectedFormat(duration)}</div>
                         <audio src={selectedBooks?.audioLink} ref={audioRef} />
                       </div>
