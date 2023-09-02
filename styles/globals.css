@@ -44,6 +44,12 @@ button:disabled {
   stroke: white;
 }
 
+.fillWithBlueSvg path {
+  fill: #032b41;
+  color: #032b41;
+  stroke: white;
+}
+
 .btn {
   background-color: #2bd97c;
   color: #032b41;

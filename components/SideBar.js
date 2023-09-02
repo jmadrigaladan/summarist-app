@@ -20,7 +20,6 @@ import AuthModal from "@/components/modals/AuthModal";
 import { setUser } from "@/redux/userSlice";
 import { signOut } from "firebase/auth";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
-import { fontSize } from "@mui/system";
 
 export default function Sidebar() {
   const pathname = usePathname();
