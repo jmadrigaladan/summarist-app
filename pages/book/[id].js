@@ -106,7 +106,6 @@ export default function BookPage({ bookData }) {
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
                       <FiClock className="w-[24px] h-[24px] mr-[4px]" />
                       <audio src={bookData?.audioLink} ref={audioRef} />
-                      {console.log(duration)}
                       <div className="mr-[4px]">{formatTime(duration)}</div>
                     </div>
                     <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
