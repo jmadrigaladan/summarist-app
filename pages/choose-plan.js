@@ -1,14 +1,22 @@
 import { IoDocumentTextSharp } from "react-icons/io5";
 import { RiPlantFill } from "react-icons/ri";
 import { FaHandshake } from "react-icons/fa";
-import { SlArrowDown, SlArrowUp } from "react-icons/sl";
+import { SlArrowDown } from "react-icons/sl";
 import { useState } from "react";
+import { getCheckoutUrl } from "@/stripePayment";
+import { useRouter } from "next/navigation";
+import { initFirebase } from "@/firebase";
+
 export default function ChoosePlan() {
   const [accordionOneClicked, setAccordionOneClicked] = useState(false);
   const [accordionTwoClicked, setAccordionTwoClicked] = useState(false);
   const [accordionThreeClicked, setAccordionThreeClicked] = useState(false);
   const [accordionFourClicked, setAccordionFourClicked] = useState(false);
   const [planSelected, setPlanSelected] = useState("yearly");
+
+  const app = initFirebase();
+  const router = useRouter();
+
   function handleAccordionOne() {
     setAccordionOneClicked(!accordionOneClicked);
   }
@@ -21,6 +29,20 @@ export default function ChoosePlan() {
   function handleAccordionFour() {
     setAccordionFourClicked(!accordionFourClicked);
   }
+
+  const upgradeToPremiumPlus = async () => {
+    console.log("upgrade to premium plus yearly");
+    const priceId = "price_1NnngbBr3SM4nWzQr84v3o9X";
+    const checkOutUrl = await getCheckoutUrl(app, priceId, "premium-plus");
+    router.push(checkOutUrl);
+  };
+
+  const upgradeToPremium = async () => {
+    console.log("upgrade to premium");
+    const priceId = "price_1NnnkgBr3SM4nWzQIUfWkQu9";
+    const checkOutUrl = await getCheckoutUrl(app, priceId, "premium");
+    router.push(checkOutUrl);
+  };
 
   return (
     <>
@@ -178,13 +200,33 @@ export default function ChoosePlan() {
 
               {/* plan__card--cta */}
               <div className="bg-white sticky bottom-0 z-[1] py-[32px] flex flex-col items-center gap-[16px]">
-                <button className="w-[300px] text-[#032b41] bg-[#2bd97c] h-[40px] rounded-[4px] text-[16px] flex items-center justify-center min-w-[180px]">
-                  Start your free 7-day trial
+                <button
+                  className="w-[300px] text-[#032b41] bg-[#2bd97c] h-[40px] rounded-[4px] text-[16px] flex items-center justify-center min-w-[180px]"
+                  onClick={() => {
+                    if (planSelected == "yearly") {
+                      upgradeToPremiumPlus();
+                    }
+                    if (planSelected == "monthly") {
+                      upgradeToPremium();
+                    }
+                  }}
+                >
+                  {planSelected == "yearly" ? (
+                    <>Start your free 7-day trial</>
+                  ) : (
+                    <>Start your first month</>
+                  )}
                 </button>
                 {/* plan_disclaimer */}
                 <div className="text-[12px] text-[#6b757b] text-center">
-                  Cancel your trial at any time before it ends, and you won’t be
-                  charged.
+                  {planSelected == "yearly" ? (
+                    <>
+                      Cancel your trial at any time before it ends, and you
+                      won’t be charged.
+                    </>
+                  ) : (
+                    <>30-day money back guarantee, no questions asked.</>
+                  )}
                 </div>
               </div>
               {/* faq__wrapper */}
