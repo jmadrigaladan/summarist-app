@@ -25,6 +25,8 @@ export default function BookPage({ bookData }) {
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
+  const [loading, setLoading] = useState();
+
   const user = useSelector((state) => state.user);
   function handlePlayer() {
     if (!user.email) {
@@ -36,7 +38,9 @@ export default function BookPage({ bookData }) {
   }
 
   const onLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    if (!loading) {
+      setDuration(audioRef.current?.duration);
+    }
   };
 
   useEffect(() => {
@@ -54,7 +58,15 @@ export default function BookPage({ bookData }) {
   }, []);
 
   useEffect(() => {
-    setDuration(audioRef.current.duration);
+    setDuration(audioRef.current?.duration);
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   const formatTime = (time) => {
@@ -80,102 +92,134 @@ export default function BookPage({ bookData }) {
             {/* inner__wrapper */}
             <div className="flex gap-[16px] flex-col-reverse lg:flex-row">
               {/* inner__book */}
-              <div className="w-full">
-                {/* inner__book title */}
-                <div className="text-[24px] text-[#032b41] mb-[16px] font-bold lg:text-[32px]">
-                  {bookData?.title}
-                </div>
-                {/* inner__book author */}
-                <div className="text-[14px] lg:text-[16px] text-[#032b41] font-bold mb-[16px]">
-                  {bookData?.author}
-                </div>
-                {/* inner__book subtitle */}
-                <div className="text-[18px] font-light text-[#032b41] lg:text-[20px] mb-[16px]">
-                  {bookData?.subTitle}
-                </div>
-                {/* innerbook wraper */}
-                <div className="border-solid border-y p-[16px] mb-[24px]">
-                  {/* innerbook description wrapper */}
-                  <div className="flex flex-wrap max-w-[400px] gap-y-[12px]">
-                    {/* innerbook description */}
-                    <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
-                      <AiOutlineStar className="w-[24px] h-[24px] mr-[4px]" />
-                      <div className="mr-[4px]">{bookData.averageRating}</div>(
-                      {bookData.totalRating} ratings)
+              {loading ? (
+                <>
+                  <div className="w-full">
+                    <div className="w-[70%] h-[32px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[40%] h-[32px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[100%] h-[32px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[45%] h-[64px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[50%] h-[32px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[20%] h-[32px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[50%] h-[64px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[80%] h-[180px] bg-[#e4e4e4] mb-[16px]"></div>
+                    <div className="w-[80%] h-[268px] bg-[#e4e4e4] mb-[16px]"></div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="w-full">
+                    {/* inner__book title */}
+
+                    <div className="text-[24px] text-[#032b41] mb-[16px] font-bold lg:text-[32px]">
+                      {bookData?.title}
                     </div>
-                    <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
-                      <FiClock className="w-[24px] h-[24px] mr-[4px]" />
-                      <audio src={bookData?.audioLink} ref={audioRef} />
-                      <div className="mr-[4px]">{formatTime(duration)}</div>
+                    {/* inner__book author */}
+                    <div className="text-[14px] lg:text-[16px] text-[#032b41] font-bold mb-[16px]">
+                      {bookData?.author}
                     </div>
-                    <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
-                      <HiOutlineMicrophone className="w-[24px] h-[24px] mr-[4px]" />
-                      <div className="mr-[4px]">{bookData.type}</div>
+                    {/* inner__book subtitle */}
+                    <div className="text-[18px] font-light text-[#032b41] lg:text-[20px] mb-[16px]">
+                      {bookData?.subTitle}
                     </div>
-                    <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
-                      <HiOutlineLightBulb className="w-[24px] h-[24px] mr-[4px]" />
-                      <div className="mr-[4px]">
-                        {bookData.keyIdeas} Key ideas
+                    {/* innerbook wraper */}
+                    <div className="border-solid border-y p-[16px] mb-[24px]">
+                      {/* innerbook description wrapper */}
+                      <div className="flex flex-wrap max-w-[400px] gap-y-[12px]">
+                        {/* innerbook description */}
+                        <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
+                          <AiOutlineStar className="w-[24px] h-[24px] mr-[4px]" />
+                          <div className="mr-[4px]">
+                            {bookData.averageRating}
+                          </div>
+                          ({bookData.totalRating} ratings)
+                        </div>
+                        <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
+                          <FiClock className="w-[24px] h-[24px] mr-[4px]" />
+                          <audio src={bookData.audioLink} ref={audioRef} />
+                          <div className="mr-[4px]">{formatTime(duration)}</div>
+                        </div>
+                        <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
+                          <HiOutlineMicrophone className="w-[24px] h-[24px] mr-[4px]" />
+                          <div className="mr-[4px]">{bookData.type}</div>
+                        </div>
+                        <div className="flex items-center w-[50%] text-[#032b41] text-[14px] font-semibold">
+                          <HiOutlineLightBulb className="w-[24px] h-[24px] mr-[4px]" />
+                          <div className="mr-[4px]">
+                            {bookData.keyIdeas} Key ideas
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                {/* inner book read btn wrapper */}
-                <div className="flex gap-[16px] mb-[24px] text-white">
-                  {modalsNeedToOpen ? <AuthModal /> : <></>}
-                  <button
-                    onClick={handlePlayer}
-                    className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
-                  >
-                    <BsBook className="w-[24px] h-[24px]" />
-                    <div className="text-[16px]">Read</div>
-                  </button>
-                  <button
-                    onClick={handlePlayer}
-                    className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
-                  >
-                    <BiMicrophone className="w-[24px] h-[24px]" />
-                    <div className="text-[16px]">Listen</div>
-                  </button>
-                </div>
-                {/* inner book bookMark */}
-                <div className="flex items-center gap-[8px] text-[#0365f2] font-medium cursor-pointer mb-[40px] text-[18px] hover:text-[#044298] font-semibold ">
-                  <BsBookmark className="w-[20px] h-[20px]" />
-                  <div>Add title to My Library</div>
-                </div>
-                {/* inner book secondary title */}
-                <div className="text-[18px] mb-[16px] text-[#032b42] font-semibold">
-                  What's it about?
-                </div>
-                {/* inner__book tags wrapper */}
-                <div className="flex flex-wrap gap-[16px] mb-[16px]">
-                  {/* inner book tag */}
-                  <div className="bg-[#f1f6f4] text-[14px] lg:text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
-                    {bookData?.tags[0]}
-                  </div>
-                  <div className="bg-[#f1f6f4] text-[14px] lg:text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
-                    {bookData?.tags[1]}
-                  </div>
-                </div>
+                    {/* inner book read btn wrapper */}
+                    <div className="flex gap-[16px] mb-[24px] text-white">
+                      {modalsNeedToOpen ? <AuthModal /> : <></>}
+                      <button
+                        onClick={handlePlayer}
+                        className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
+                      >
+                        <BsBook className="w-[24px] h-[24px]" />
+                        <div className="text-[16px]">Read</div>
+                      </button>
+                      <button
+                        onClick={handlePlayer}
+                        className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
+                      >
+                        <BiMicrophone className="w-[24px] h-[24px]" />
+                        <div className="text-[16px]">Listen</div>
+                      </button>
+                    </div>
+                    {/* inner book bookMark */}
+                    <div className="flex items-center gap-[8px] text-[#0365f2] font-medium cursor-pointer mb-[40px] text-[18px] hover:text-[#044298] font-semibold ">
+                      <BsBookmark className="w-[20px] h-[20px]" />
+                      <div>Add title to My Library</div>
+                    </div>
+                    {/* inner book secondary title */}
+                    <div className="text-[18px] mb-[16px] text-[#032b42] font-semibold">
+                      What's it about?
+                    </div>
+                    {/* inner__book tags wrapper */}
+                    <div className="flex flex-wrap gap-[16px] mb-[16px]">
+                      {/* inner book tag */}
+                      <div className="bg-[#f1f6f4] text-[14px] lg:text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
+                        {bookData?.tags[0]}
+                      </div>
+                      <div className="bg-[#f1f6f4] text-[14px] lg:text-[16px] px-[16px] h-[48px] flex items-center cursor-not-allowed text-[#032b41] font-semibold rounded-[4px]">
+                        {bookData?.tags[1]}
+                      </div>
+                    </div>
 
-                {/* inner book description */}
-                <div className="text-[#023b41] text-[14px] md:text-[16px] mb-[16px] leading-normal">
-                  {bookData?.bookDescription}
-                </div>
-                {/* inner book secondary title */}
-                <div className="text-[18px] mb-[16px] text-[#032b42] font-semibold">
-                  About the author
-                </div>
-                {/* author description */}
-                <div className="text-[#023b41] text-[14px] md:text-[16px] mb-[16px] leading-normal">
-                  {bookData?.authorDescription}
-                </div>
-              </div>
+                    {/* inner book description */}
+                    <div className="text-[#023b41] text-[14px] md:text-[16px] mb-[16px] leading-normal">
+                      {bookData?.bookDescription}
+                    </div>
+                    {/* inner book secondary title */}
+                    <div className="text-[18px] mb-[16px] text-[#032b42] font-semibold">
+                      About the author
+                    </div>
+                    {/* author description */}
+                    <div className="text-[#023b41] text-[14px] md:text-[16px] mb-[16px] leading-normal">
+                      {bookData?.authorDescription}
+                    </div>
+                  </div>
+                </>
+              )}
               {/* inner__book img__wrapper */}
+
               <div className="flex justify-center ">
-                <figure className="h-[300px] w-[300px] min-w-[300px]">
-                  <img src={bookData?.imageLink} alt="" />
-                </figure>
+                {loading ? (
+                  <>
+                    <div className="w-full">
+                      <div className="bg-[#e4e4e4] w-[300px] h-[300px]"></div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <figure className="h-[300px] w-[300px] min-w-[300px]">
+                      <img src={bookData?.imageLink} alt="" />
+                    </figure>
+                  </>
+                )}
               </div>
             </div>
           </div>

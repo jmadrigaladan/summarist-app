@@ -10,10 +10,13 @@ export default function BooksForYou({
 }) {
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
-
+  const [loading, setLoading] = useState();
+  
   const onLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    setDuration(audioRef.current?.duration);
   };
+
+  const loadingArr = [0, 0, 0, 0, 0];
 
   useEffect(() => {
     if (audioRef.current) {
@@ -30,7 +33,15 @@ export default function BooksForYou({
   }, []);
 
   useEffect(() => {
-    setDuration(audioRef.current.duration);
+    setDuration(audioRef.current?.duration);
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1100);
+    return () => clearTimeout(timer);
   }, []);
 
   const selectedFormat = (time) => {
@@ -60,40 +71,51 @@ export default function BooksForYou({
                   Selected just for you
                 </div>
                 {/* Book Link */}
-                <Link
-                  href={`book/${selectedBooks.id}`}
-                  className="w-full flex-col md:flex-row flex justify-between lg:w-[675px] bg-[#fbefd6] rounded-[4px] p-[24px] mb-[24px] gap-[24px]"
-                >
-                  {/* selected book sub title */}
-                  <div className="w-full text-[14px] md:w-[40%] md:text-[16px]">
-                    {selectedBooks.subTitle}
-                  </div>
-                  {/* selected book line */}
-                  <div className="hidden md:inline-block w-[1px] bg-[#bac8ce]"></div>
-                  {/* selected book content */}
-                  <div className="w-full flex gap-[16px] md:w-[60%]">
-                    <figure className="h-[140px] w-[140px] min-w-[140px]">
-                      <img src={selectedBooks.imageLink} alt="Book Image" />
-                    </figure>
-                    {/* selected book__text */}
-                    <div>
-                      {/* selected book title */}
-                      <div className="text-[16px] font-semibold text-[#032b41] mb-[8px]">
-                        {selectedBooks.title}
+                {loading ? (
+                  <>
+                    <div className="h-[200px] bg-[#e4e4e4] w-[60%] mb-[24px] "></div>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href={`book/${selectedBooks.id}`}
+                      className="w-full flex-col md:flex-row flex justify-between lg:w-[675px] bg-[#fbefd6] rounded-[4px] p-[24px] mb-[24px] gap-[24px]"
+                    >
+                      {/* selected book sub title */}
+                      <div className="w-full text-[14px] md:w-[40%] md:text-[16px]">
+                        {selectedBooks.subTitle}
                       </div>
-                      {/* selected book__author */}
-                      <div className="text-[14px] text-[#394547] mb-[16px]">
-                        {selectedBooks.author}
+                      {/* selected book line */}
+                      <div className="hidden md:inline-block w-[1px] bg-[#bac8ce]"></div>
+                      {/* selected book content */}
+                      <div className="w-full flex gap-[16px] md:w-[60%]">
+                        <figure className="h-[140px] w-[140px] min-w-[140px]">
+                          <img src={selectedBooks.imageLink} alt="Book Image" />
+                        </figure>
+                        {/* selected book__text */}
+                        <div>
+                          {/* selected book title */}
+                          <div className="text-[16px] font-semibold text-[#032b41] mb-[8px]">
+                            {selectedBooks.title}
+                          </div>
+                          {/* selected book__author */}
+                          <div className="text-[14px] text-[#394547] mb-[16px]">
+                            {selectedBooks.author}
+                          </div>
+                          {/* selected book duration */}
+                          <div className="flex items-center  text-[14px] md:text-[16px]">
+                            <AiFillPlayCircle className="w-[48px] h-[48px] mr-[4px] " />
+                            <div>{selectedFormat(duration)}</div>
+                            <audio
+                              src={selectedBooks.audioLink}
+                              ref={audioRef}
+                            />
+                          </div>
+                        </div>
                       </div>
-                      {/* selected book duration */}
-                      <div className="flex items-center  text-[14px] md:text-[16px]">
-                        <AiFillPlayCircle className="w-[48px] h-[48px] mr-[4px] " />
-                        <div>{selectedFormat(duration)}</div>
-                        <audio src={selectedBooks?.audioLink} ref={audioRef} />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                    </Link>
+                  </>
+                )}
                 <div className="text-[22px] font-bold text-[#032b41] mb-[16px]">
                   Recommended For You
                 </div>
@@ -102,19 +124,38 @@ export default function BooksForYou({
                 </div>
                 {/* for you recommended books */}
                 <div className="flex overflow-x-auto snap-x gap-[16px] mb-[16px]">
-                  {recommendedBooks.map((book, index) => (
-                    <DisplayBook
-                      key={index}
-                      bookId={book?.id}
-                      bookTitle={book?.title}
-                      bookImg={book?.imageLink}
-                      booksubTitle={book?.subTitle}
-                      author={book?.author}
-                      premium={book?.subscriptionRequired}
-                      avgRating={book?.averageRating}
-                      audioLink={book?.audioLink}
-                    />
-                  ))}
+                  {loading ? (
+                    <>
+                      {loadingArr.map((book, index) => (
+                        <>
+                          <div className="min-w-[200px] w-[200px]">
+                            {/* book image */}
+                            <div className="w-full h-[240px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-full h-[20px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-[90%] h-[20px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-[80%] h-[40px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-[90%] h-[20px] bg-[#e4e4e4] mb-[8px]"></div>
+                          </div>
+                        </>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {recommendedBooks.map((book, index) => (
+                        <DisplayBook
+                          key={index}
+                          bookId={book?.id}
+                          bookTitle={book?.title}
+                          bookImg={book?.imageLink}
+                          booksubTitle={book?.subTitle}
+                          author={book?.author}
+                          premium={book?.subscriptionRequired}
+                          avgRating={book?.averageRating}
+                          audioLink={book?.audioLink}
+                        />
+                      ))}
+                    </>
+                  )}
                 </div>
                 <div className="text-[22px] font-bold text-[#032b41] mb-[16px]">
                   Suggested for you
@@ -122,19 +163,38 @@ export default function BooksForYou({
                 <div className="font-light mb-[16px]">Browse these Books</div>
                 {/* for you recommended books */}
                 <div className="flex overflow-x-auto snap-x gap-[16px] mb-[16px]">
-                  {suggestedBooks.map((book, index) => (
-                    <DisplayBook
-                      key={index}
-                      bookId={book?.id}
-                      bookTitle={book?.title}
-                      bookImg={book?.imageLink}
-                      booksubTitle={book?.subTitle}
-                      author={book?.author}
-                      premium={book?.subscriptionRequired}
-                      avgRating={book?.averageRating}
-                      audioLink={book?.audioLink}
-                    />
-                  ))}
+                  {loading ? (
+                    <>
+                      {loadingArr.map((book, index) => (
+                        <>
+                          <div className="min-w-[200px] w-[200px]">
+                            {/* book image */}
+                            <div className="w-full h-[240px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-full h-[20px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-[90%] h-[20px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-[80%] h-[40px] bg-[#e4e4e4] mb-[8px]"></div>
+                            <div className="w-[90%] h-[20px] bg-[#e4e4e4] mb-[8px]"></div>
+                          </div>
+                        </>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {suggestedBooks.map((book, index) => (
+                        <DisplayBook
+                          key={index}
+                          bookId={book?.id}
+                          bookTitle={book?.title}
+                          bookImg={book?.imageLink}
+                          booksubTitle={book?.subTitle}
+                          author={book?.author}
+                          premium={book?.subscriptionRequired}
+                          avgRating={book?.averageRating}
+                          audioLink={book?.audioLink}
+                        />
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -169,7 +229,7 @@ export function DisplayBook({
   };
 
   const onLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    setDuration(audioRef.current?.duration);
   };
 
   useEffect(() => {
@@ -187,7 +247,7 @@ export function DisplayBook({
   }, []);
 
   useEffect(() => {
-    setDuration(audioRef.current.duration);
+    setDuration(audioRef.current?.duration);
   }, []);
 
   return (

@@ -9,6 +9,7 @@ import { auth } from "@/firebase";
 import { setUser } from "@/redux/userSlice";
 import { openAuthModal } from "@/redux/modalSlice";
 import AuthModal from "@/components/modals/AuthModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export async function getServerSideProps(context) {
   const bookRes = await fetch(
@@ -28,6 +29,7 @@ export default function BookPlayer({ bookData }) {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
+  const [loading, setLoading] = useState();
 
   const repeat = useCallback(() => {
     const currentTime = audioRef.current.currentTime;
@@ -118,6 +120,14 @@ export default function BookPlayer({ bookData }) {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 900);
+    return () => clearTimeout(timer);
+  }, []);
+
   function handleLogIn() {
     dispatch(openAuthModal());
     setModalNeedsToOpen(true);
@@ -131,63 +141,89 @@ export default function BookPlayer({ bookData }) {
         {/* summary */}
         <div className="w-full overflow-y-auto h-[calc(100vh-280px)] md:h-[calc(100vh-180px)]">
           {modalsNeedToOpen ? <AuthModal /> : <></>}
+          {loading ? (
+            <>
+              <div className="w-full flex justify-center items-center h-full">
+                <CircularProgress size="4rem" style={{ color: "#032b41" }} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="whitespace-pre-line p-[24px] max-w-[800px] mx-auto">
+                {/* audio book summary title */}
+                <div className="text-[#032b41] text-[20px] md:text-[24px] border-b-[1px] border-[#e1e7ea] border-solid pb-[16px] leading-normal font-semibold mb-[32px]">
+                  {bookData?.title}
+                </div>
+                {user.email !== null ? (
+                  <>
+                    {/* audio book summary text */}
+                    <div className="text-[14px] md:text-[18px] whitespace-pre-line leading-[1.4] text-[#032b41]">
+                      {bookData?.summary}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* settings login wrapper */}
+                    <div className="max-w-[460px] flex flex-col items-center mx-auto">
+                      <img src={"/assets/login.png"} alt="" />
+                      {/* log in text */}
+                      <div className="text-[24px] text-[#032b41] font-bold mb-[16px] text-center">
+                        Log in to your account to read and listen to the book
+                      </div>
+                      {/* button */}
+                      <button
+                        className="bg-[#2bd97c] text-[#032b41] h-[40px] rounded-[4px] text-[16px] flex items-center justify-center min-w-[180px] hover:opacity-70"
+                        onClick={handleLogIn}
+                      >
+                        Login
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
+          )}
           {/* audio book summary */}
-          <div className="whitespace-pre-line p-[24px] max-w-[800px] mx-auto">
-            {/* audio book summary title */}
-            <div className="text-[#032b41] text-[20px] md:text-[24px] border-b-[1px] border-[#e1e7ea] border-solid pb-[16px] leading-normal font-semibold mb-[32px]">
-              {bookData?.title}
-            </div>
-            {user.email !== null ? (
-              <>
-                {/* audio book summary text */}
-                <div className="text-[14px] md:text-[18px] whitespace-pre-line leading-[1.4] text-[#032b41]">
-                  {bookData?.summary}
-                </div>
-              </>
-            ) : (
-              <>
-                {/* settings login wrapper */}
-                <div className="max-w-[460px] flex flex-col items-center mx-auto">
-                  <img src={"/assets/login.png"} alt="" />
-                  {/* log in text */}
-                  <div className="text-[24px] text-[#032b41] font-bold mb-[16px] text-center">
-                    Log in to your account to read and listen to the book
-                  </div>
-                  {/* button */}
-                  <button
-                    className="bg-[#2bd97c] text-[#032b41] h-[40px] rounded-[4px] text-[16px] flex items-center justify-center min-w-[180px] hover:opacity-70"
-                    onClick={handleLogIn}
-                  >
-                    Login
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
 
           {/* audio wrapper */}
           <div className="h-[180px] py-[16px] px-[24px] w-full md:h-[80px] md:py-0 mt-auto flex-col md:flex-row flex items-center justify-between bg-[#042330] md:px-[40px] fixed bottom-0 left-0">
             {/* audio track wrapper */}
             <div className="flex justify-center w-full md:w-[calc(100%/3)] gap-[12px]">
-              {/* audio track img mask */}
-              <figure className="flex items-center max-w-[48px]">
-                {/* book image wrapper */}
-                <figure className="h-[48px] w-[48px] min-w-[48px]">
-                  {/* book img */}
-                  <img
-                    className="w-full h-full"
-                    src={bookData.imageLink}
-                    alt=""
-                  />
-                </figure>
-              </figure>
-              {/* audio track details wrapper */}
-              <div className="h-[48px] text-white text-[14px] flex flex-col gap-[4px] justify-center">
-                {/* audio track title */}
-                <div className="h-[48px] leading-tight">{bookData?.title}</div>
-                {/* audio track author */}
-                <div className="text-[#bac8ce]">{bookData?.author}</div>
-              </div>
+              {loading ? (
+                <>
+                  <div className="w-full flex gap-[12px]">
+                    <div className="bg-white h-[48px] w-[48px]"></div>
+                    <div className="flex flex-col">
+                      <div className="bg-white h-[16px] w-[50px] mb-[12px]"></div>
+                      <div className="bg-white h-[16px] w-[100px]"></div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <figure className="flex items-center max-w-[48px]">
+                    {/* book image wrapper */}
+                    <figure className="h-[48px] w-[48px] min-w-[48px]">
+                      {/* book img */}
+                      <img
+                        className="w-full h-full"
+                        src={bookData.imageLink}
+                        alt=""
+                      />
+                    </figure>
+                  </figure>
+                  {/* audio track details wrapper */}
+                  <div className="h-[48px] text-white text-[14px] flex flex-col gap-[4px] justify-center">
+                    {/* audio track title */}
+
+                    <div className="h-[48px] leading-tight">
+                      {bookData?.title}
+                    </div>
+                    {/* audio track author */}
+                    <div className="text-[#bac8ce]">{bookData?.author}</div>
+                  </div>
+                </>
+              )}
             </div>
             {/* audio controls wrapper */}
 
