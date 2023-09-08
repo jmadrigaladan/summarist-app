@@ -39,6 +39,7 @@ export default function HamburgerSideBar() {
     });
     return unsubscribe;
   }, []);
+
   async function handleSignOut() {
     await signOut(auth);
     dispatch(signOutUser());
@@ -55,100 +56,100 @@ export default function HamburgerSideBar() {
         <BiMenu
           className={`${isOpen ? "hidden" : "inline"} w-[32px] h-[32px]`}
         />
-        <div className={`sidebar__overlay ${isOpen ? "inline" : "hidden"}`}> </div>
-          <div
-            className={`phone__menu ${isOpen ? "phone__menu--active" : " "}`}
-          >
-            <div className="flex justify-center">
-              <figure className="max-w-[160px] flex justify-center items-center mt-[20px]">
-                <img className="" src={"/assets/logo.png"} alt="" />
-              </figure>
-            </div>
-            <div className="mt-[40px]">
-              {/* sidebar top */}
-              <Link href={"/for-you"}>
-                <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
-                  <div
-                    className={`w-[5px] ${
-                      pathname == "/for-you" ? "bg-[#2bd97c]" : ""
-                    } h-[56px] mr-[16px]`}
-                  ></div>
-                  <AiOutlineHome className="w-[24px] h-[24px] mr-[8px]" />
-                  <div>For you</div>
-                </div>
-              </Link>
-              <Link href={"/library"}>
-                <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
-                  <div
-                    className={`w-[5px] ${
-                      pathname == "/library" ? "bg-[#2bd97c]" : ""
-                    } h-[56px] mr-[16px]`}
-                  ></div>
-                  <IoBookmarkOutline className="w-[24px] h-[24px] mr-[8px]" />
-                  <div>My Library</div>
-                </div>
-              </Link>
-              <div className="cursor-not-allowed">
-                <div className="flex items-center h-[56px] ">
-                  <div className="w-[5px] h-[56px] mr-[16px]"></div>
-                  <RiBallPenLine className="w-[24px] h-[24px] mr-[8px]" />
-                  <div>Highlights</div>
-                </div>
+        <div className={`sidebar__overlay ${isOpen ? "inline" : "hidden"}`}>
+          {" "}
+        </div>
+        <div className={`phone__menu ${isOpen ? "phone__menu--active" : " "}`}>
+          <div className="flex justify-center">
+            <figure className="max-w-[160px] flex justify-center items-center mt-[20px]">
+              <img className="" src={"/assets/logo.png"} alt="" />
+            </figure>
+          </div>
+          <div className="mt-[40px]">
+            {/* sidebar top */}
+            <Link href={"/for-you"}>
+              <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
+                <div
+                  className={`w-[5px] ${
+                    pathname == "/for-you" ? "bg-[#2bd97c]" : ""
+                  } h-[56px] mr-[16px]`}
+                ></div>
+                <AiOutlineHome className="w-[24px] h-[24px] mr-[8px]" />
+                <div>For you</div>
               </div>
-              <div className="cursor-not-allowed">
-                <div className="flex items-center h-[56px] ">
-                  <div className="w-[5px] h-[56px] mr-[16px]"></div>
-                  <AiOutlineSearch className="w-[24px] h-[24px] mr-[8px]" />
-                  <div>Search</div>
-                </div>
+            </Link>
+            <Link href={"/library"}>
+              <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
+                <div
+                  className={`w-[5px] ${
+                    pathname == "/library" ? "bg-[#2bd97c]" : ""
+                  } h-[56px] mr-[16px]`}
+                ></div>
+                <IoBookmarkOutline className="w-[24px] h-[24px] mr-[8px]" />
+                <div>My Library</div>
+              </div>
+            </Link>
+            <div className="cursor-not-allowed">
+              <div className="flex items-center h-[56px] ">
+                <div className="w-[5px] h-[56px] mr-[16px]"></div>
+                <RiBallPenLine className="w-[24px] h-[24px] mr-[8px]" />
+                <div>Highlights</div>
               </div>
             </div>
-            <div className="mt-[180px]">
-              {/* sidebar bottom */}
-              <Link href={"/settings"}>
-                <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
-                  <div
-                    className={`w-[5px] ${
-                      pathname == "/settings" ? "bg-[#2bd97c]" : ""
-                    } h-[56px] mr-[16px]`}
-                  ></div>
-                  <SlSettings className="w-[24px] h-[24px] mr-[8px]" />
-                  <div>Settings</div>
-                </div>
-              </Link>
-              <div className="cursor-not-allowed">
-                <div className="flex items-center h-[56px] ">
-                  <div className="w-[5px]  h-[56px] mr-[16px]"></div>
-                  <AiOutlineQuestionCircle className="w-[24px] h-[24px] mr-[8px]" />
-                  <div>Help & Support</div>
-                </div>
+            <div className="cursor-not-allowed">
+              <div className="flex items-center h-[56px] ">
+                <div className="w-[5px] h-[56px] mr-[16px]"></div>
+                <AiOutlineSearch className="w-[24px] h-[24px] mr-[8px]" />
+                <div>Search</div>
               </div>
-              {user.email ? (
-                <>
-                  <div
-                    className="flex items-center h-[56px] hover:bg-[#f0efef] cursor-pointer"
-                    onClick={handleSignOut}
-                  >
-                    <div className="w-[5px]  h-[56px] mr-[16px]"></div>
-                    <FiLogOut className="w-[24px] h-[24px] mr-[8px]" />
-                    <div>Log Out</div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div
-                    className="flex items-center h-[56px] hover:bg-[#f0efef] cursor-pointer"
-                    onClick={handleLogIn}
-                  >
-                    <div className="w-[5px]  h-[56px] mr-[16px]"></div>
-                    <FiLogIn className="w-[24px] h-[24px] mr-[8px]" />
-                    <div>Login</div>
-                  </div>
-                </>
-              )}
             </div>
           </div>
+          <div className="mt-[180px]">
+            {/* sidebar bottom */}
+            <Link href={"/settings"}>
+              <div className="flex items-center h-[56px] hover:bg-[#f0efef]">
+                <div
+                  className={`w-[5px] ${
+                    pathname == "/settings" ? "bg-[#2bd97c]" : ""
+                  } h-[56px] mr-[16px]`}
+                ></div>
+                <SlSettings className="w-[24px] h-[24px] mr-[8px]" />
+                <div>Settings</div>
+              </div>
+            </Link>
+            <div className="cursor-not-allowed">
+              <div className="flex items-center h-[56px] ">
+                <div className="w-[5px]  h-[56px] mr-[16px]"></div>
+                <AiOutlineQuestionCircle className="w-[24px] h-[24px] mr-[8px]" />
+                <div>Help & Support</div>
+              </div>
+            </div>
+            {user.email ? (
+              <>
+                <div
+                  className="flex items-center h-[56px] hover:bg-[#f0efef] cursor-pointer"
+                  onClick={handleSignOut}
+                >
+                  <div className="w-[5px]  h-[56px] mr-[16px]"></div>
+                  <FiLogOut className="w-[24px] h-[24px] mr-[8px]" />
+                  <div>Log Out</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className="flex items-center h-[56px] hover:bg-[#f0efef] cursor-pointer"
+                  onClick={handleLogIn}
+                >
+                  <div className="w-[5px]  h-[56px] mr-[16px]"></div>
+                  <FiLogIn className="w-[24px] h-[24px] mr-[8px]" />
+                  <div>Login</div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
+      </div>
     </>
   );
 }

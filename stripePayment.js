@@ -9,6 +9,7 @@ import {
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 export const getCheckoutUrl = async (app, priceId, subType) => {
+  console.log("checking out");
   const userId = auth.currentUser?.uid;
   if (!userId) throw new Error("User is not authenticated");
 
@@ -28,6 +29,7 @@ export const getCheckoutUrl = async (app, priceId, subType) => {
   });
 
   return new Promise((resolve, reject) => {
+    console.log("writing to db");
     const unsubscribe = onSnapshot(docRef, (snap) => {
       const { error, url } = snap.data();
       if (error) {

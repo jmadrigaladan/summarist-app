@@ -5,7 +5,7 @@ import { SlArrowDown } from "react-icons/sl";
 import { useState } from "react";
 import { getCheckoutUrl } from "@/stripePayment";
 import { useRouter } from "next/navigation";
-import { initFirebase } from "@/firebase";
+import { app } from "@/firebase";
 
 export default function ChoosePlan() {
   const [accordionOneClicked, setAccordionOneClicked] = useState(false);
@@ -14,7 +14,6 @@ export default function ChoosePlan() {
   const [accordionFourClicked, setAccordionFourClicked] = useState(false);
   const [planSelected, setPlanSelected] = useState("yearly");
 
-  const app = initFirebase();
   const router = useRouter();
 
   function handleAccordionOne() {
