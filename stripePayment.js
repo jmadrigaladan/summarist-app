@@ -8,8 +8,7 @@ import {
 } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
-export const getCheckoutUrl = async (app, priceId, subType) => {
-  console.log("checking out");
+export const getCheckoutUrl = async (app, priceId) => {
   const userId = auth.currentUser?.uid;
   if (!userId) throw new Error("User is not authenticated");
 
@@ -18,18 +17,16 @@ export const getCheckoutUrl = async (app, priceId, subType) => {
     db,
     "customers",
     userId,
-    "checkout_sessions"
+    "checkout_sessions" 
   );
 
   const docRef = await addDoc(checkoutSessionRef, {
-    subscriptionType: subType,
     price: priceId,
     success_url: window.location.origin + "/for-you",
     cancel_url: window.location.origin + "/for-you",
   });
 
   return new Promise((resolve, reject) => {
-    console.log("writing to db");
     const unsubscribe = onSnapshot(docRef, (snap) => {
       const { error, url } = snap.data();
       if (error) {
@@ -45,34 +42,34 @@ export const getCheckoutUrl = async (app, priceId, subType) => {
   });
 };
 
-export const getPortalUrl = async (app) => {
-  const auth = getAuth(app);
-  const user = auth.currentUser;
+// export const getPortalUrl = async (app) => {
+//   const auth = getAuth(app);
+//   const user = auth.currentUser;
 
-  let dataWithUrl;
-  try {
-    const functions = getFunctions(app, "us-central1");
-    const functionRef = httpsCallable(
-      functions,
-      "ext-firestore-stripe-payments-createPortalLink"
-    );
-    const { data } = await functionRef({
-      customerId: user?.uid,
-      returnUrl: window.location.origin + "/for-you",
-    });
+//   let dataWithUrl;
+//   try {
+//     const functions = getFunctions(app, "us-central1");
+//     const functionRef = httpsCallable(
+//       functions,
+//       "ext-firestore-stripe-payments-createPortalLink"
+//     );
+//     const { data } = await functionRef({
+//       customerId: user?.uid,
+//       returnUrl: window.location.origin + "/for-you",
+//     });
 
-    // Add a type to the data
-    dataWithUrl = data;
-    console.log("Reroute to Stripe portal: ", dataWithUrl.url);
-  } catch (error) {
-    console.error(error);
-  }
+//     // Add a type to the data
+//     dataWithUrl = data;
+//     console.log("Reroute to Stripe portal: ", dataWithUrl.url);
+//   } catch (error) {
+//     console.error(error);
+//   }
 
-  return new Promise((resolve, reject) => {
-    if (dataWithUrl.url) {
-      resolve(dataWithUrl.url);
-    } else {
-      reject(new Error("No url returned"));
-    }
-  });
-};
+//   return new Promise((resolve, reject) => {
+//     if (dataWithUrl.url) {
+//       resolve(dataWithUrl.url);
+//     } else {
+//       reject(new Error("No url returned"));
+//     }
+//   });
+// };

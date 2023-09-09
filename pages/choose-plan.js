@@ -32,16 +32,17 @@ export default function ChoosePlan() {
   const upgradeToPremiumPlus = async () => {
     console.log("upgrade to premium plus yearly");
     const priceId = "price_1NnngbBr3SM4nWzQr84v3o9X";
-    const checkOutUrl = await getCheckoutUrl(app, priceId, "premium-plus");
+    const checkOutUrl = await getCheckoutUrl(app, priceId);
     router.push(checkOutUrl);
   };
 
   const upgradeToPremium = async () => {
     console.log("upgrade to premium");
     const priceId = "price_1NnnkgBr3SM4nWzQIUfWkQu9";
-    const checkOutUrl = await getCheckoutUrl(app, priceId, "premium");
+    const checkOutUrl = await getCheckoutUrl(app, priceId);
     router.push(checkOutUrl);
   };
+
 
   return (
     <>
