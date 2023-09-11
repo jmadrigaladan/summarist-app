@@ -9,7 +9,6 @@ import { openAuthModal } from "@/redux/modalSlice";
 import AuthModal from "@/components/modals/AuthModal";
 
 export default function Settings() {
-  const email = auth?.currentUser?.email;
   const user = useSelector((state) => state.user);
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const [premiumStatus, setPremiumStatus] = useState("");

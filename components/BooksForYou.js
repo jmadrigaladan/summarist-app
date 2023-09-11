@@ -3,6 +3,7 @@ import { FiClock } from "react-icons/fi";
 import { AiOutlineStar } from "react-icons/ai";
 import { useState, useRef, useEffect } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
+import { auth } from "@/firebase";
 export default function BooksForYou({
   selectedBooks,
   recommendedBooks,
@@ -11,7 +12,8 @@ export default function BooksForYou({
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
   const [loading, setLoading] = useState();
-  
+  const [premiumStatus, setPremiumStatus] = useState("");
+
   const onLoadedMetadata = () => {
     setDuration(audioRef.current?.duration);
   };
@@ -54,6 +56,20 @@ export default function BooksForYou({
     }
     return "0 mins 0 secs";
   };
+
+  async function getCustomClaimRole() {
+    await auth.currentUser?.getIdToken(true);
+    const decodedToken = await auth.currentUser?.getIdTokenResult();
+    return decodedToken?.claims.stripeRole;
+  }
+
+  useEffect(() => {
+    const checkPremium = async () => {
+      const newPremiumStatus = await getCustomClaimRole();
+      setPremiumStatus(newPremiumStatus);
+    };
+    checkPremium();
+  }, [auth.currentUser?.uid]);
 
   return (
     <>
@@ -152,6 +168,7 @@ export default function BooksForYou({
                           premium={book?.subscriptionRequired}
                           avgRating={book?.averageRating}
                           audioLink={book?.audioLink}
+                          premiumStatus={premiumStatus}
                         />
                       ))}
                     </>
@@ -191,6 +208,7 @@ export default function BooksForYou({
                           premium={book?.subscriptionRequired}
                           avgRating={book?.averageRating}
                           audioLink={book?.audioLink}
+                          premiumStatus={premiumStatus}
                         />
                       ))}
                     </>
@@ -214,6 +232,7 @@ export function DisplayBook({
   premium,
   avgRating,
   audioLink,
+  premiumStatus,
 }) {
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
@@ -256,10 +275,14 @@ export function DisplayBook({
         href={`book/${bookId}`}
         className="max-w-[200px] pt-[32px] px-[12px] pb-[12px] hover:bg-[#f1f6f4] relative"
       >
-        {premium ? (
-          <div className="w-[55px] absolute top-0 right-0 bg-[#032b41] h-[18px] flex items-center text-white text-[10px] px-[8px] rounded-[20px]">
-            Premium
-          </div>
+        {!premiumStatus ? (
+          premium ? (
+            <div className="w-[55px] absolute top-0 right-0 bg-[#032b41] h-[18px] flex items-center text-white text-[10px] px-[8px] rounded-[20px]">
+              Premium
+            </div>
+          ) : (
+            ""
+          )
         ) : (
           ""
         )}

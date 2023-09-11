@@ -10,6 +10,7 @@ import { FiClock } from "react-icons/fi";
 import { HiOutlineLightBulb, HiOutlineMicrophone } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
 import { openAuthModal } from "@/redux/modalSlice";
+import { auth } from "@/firebase";
 
 export async function getServerSideProps(context) {
   const bookRes = await fetch(
@@ -26,12 +27,15 @@ export default function BookPage({ bookData }) {
   const audioRef = useRef();
   const [duration, setDuration] = useState(0);
   const [loading, setLoading] = useState();
+  const [premiumStatus, setPremiumStatus] = useState("");
 
   const user = useSelector((state) => state.user);
-  function handlePlayer() {
+  function handlePlayer(bookSubscription) {
     if (!user.email) {
       dispatch(openAuthModal());
       setModalNeedsToOpen(true);
+    } else if (bookSubscription && !premiumStatus) {
+      router.push("/choose-plan");
     } else {
       router.push(`/player/${bookData.id}`);
     }
@@ -80,8 +84,23 @@ export default function BookPage({ bookData }) {
     return "00:00";
   };
 
+  async function getCustomClaimRole() {
+    await auth.currentUser?.getIdToken(true);
+    const decodedToken = await auth.currentUser?.getIdTokenResult();
+    return decodedToken?.claims.stripeRole;
+  }
+
+  useEffect(() => {
+    const checkPremium = async () => {
+      const newPremiumStatus = await getCustomClaimRole();
+      setPremiumStatus(newPremiumStatus);
+    };
+    checkPremium();
+  }, [auth.currentUser?.uid]);
+
   return (
     <div className="w-full">
+      {console.log(bookData.subscriptionRequired)}
       <Sidebar />
       <SearchBar />
       <div className="md:ml-[200px] md:w-[calc(100%-200px)]">
@@ -155,14 +174,18 @@ export default function BookPage({ bookData }) {
                     <div className="flex gap-[16px] mb-[24px] text-white">
                       {modalsNeedToOpen ? <AuthModal /> : <></>}
                       <button
-                        onClick={handlePlayer}
+                        onClick={() =>
+                          handlePlayer(bookData.subscriptionRequired)
+                        }
                         className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
                       >
                         <BsBook className="w-[24px] h-[24px]" />
                         <div className="text-[16px]">Read</div>
                       </button>
                       <button
-                        onClick={handlePlayer}
+                        onClick={() =>
+                          handlePlayer(bookData.subscriptionRequired)
+                        }
                         className="flex items-center justify-center w-[144px] h-[48px] bg-[#032b41] rounded-[4px] cursor-pointer gap-[8px] hover:opacity-70"
                       >
                         <BiMicrophone className="w-[24px] h-[24px]" />

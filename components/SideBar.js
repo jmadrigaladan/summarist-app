@@ -20,12 +20,14 @@ import AuthModal from "@/components/modals/AuthModal";
 import { setUser } from "@/redux/userSlice";
 import { signOut } from "firebase/auth";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
+import { useRouter } from "next/router";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [modalsNeedToOpen, setModalNeedsToOpen] = useState(false);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const router = useRouter();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) return;
@@ -44,6 +46,7 @@ export default function Sidebar() {
   async function handleSignOut() {
     await signOut(auth);
     dispatch(signOutUser());
+    router.reload();
   }
 
   function handleLogIn() {

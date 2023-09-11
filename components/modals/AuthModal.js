@@ -67,7 +67,7 @@ export default function AuthModal() {
     let logInErrorMessage;
     const logIn = await signInWithEmailAndPassword(auth, email, password)
       .then((u) => {})
-      .catch((error) => { 
+      .catch((error) => {
         logInErrorMessage = error;
         setTimeout(() => {
           setUserPageLoading(false);
@@ -79,6 +79,7 @@ export default function AuthModal() {
       setTimeout(() => router.push("/for-you"), 2000);
     }
     dispatch(closeAuthModal());
+    router.reload();
   }
 
   useEffect(() => {
